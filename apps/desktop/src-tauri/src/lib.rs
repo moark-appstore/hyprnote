@@ -5,6 +5,7 @@ mod store;
 use ext::*;
 use store::*;
 
+use tauri_plugin_gitee_ai;
 use tauri_plugin_windows::{HyprWindow, WindowsPluginExt};
 
 use tracing_subscriber::{
@@ -90,6 +91,7 @@ pub async fn main() {
         .plugin(tauri_plugin_decorum::init())
         .plugin(tauri_plugin_windows::init())
         .plugin(tauri_plugin_process::init())
+        .plugin(tauri_plugin_gitee_ai::init())
         .plugin(tauri_plugin_global_shortcut::Builder::new().build())
         .plugin(tauri_plugin_autostart::init(
             tauri_plugin_autostart::MacosLauncher::LaunchAgent,

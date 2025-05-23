@@ -90,6 +90,7 @@ tauri-plugin-store2 = { path = "plugins/store2" }
 tauri-plugin-template = { path = "plugins/template" }
 tauri-plugin-tray = { path = "plugins/tray" }
 tauri-plugin-windows = { path = "plugins/windows" }
+tauri-plugin-gitee-ai = { path = "plugins/gitee-ai" }
 
 async-stream = "0.3.6"
 futures-channel = "0.3.31"

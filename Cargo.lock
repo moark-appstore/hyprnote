@@ -3347,6 +3347,7 @@ dependencies = [
  "tauri-plugin-dialog",
  "tauri-plugin-flags",
  "tauri-plugin-fs",
+ "tauri-plugin-gitee-ai",
  "tauri-plugin-global-shortcut",
  "tauri-plugin-http",
  "tauri-plugin-listener",
@@ -13093,6 +13094,29 @@ dependencies = [
  "thiserror 2.0.12",
  "toml",
  "url",
+ "uuid",
+]
+
+[[package]]
+name = "tauri-plugin-gitee-ai"
+version = "0.0.1"
+dependencies = [
+ "chrono",
+ "db-core",
+ "db-user",
+ "reqwest 0.12.15",
+ "serde",
+ "serde_json",
+ "specta",
+ "specta-typescript",
+ "strum 0.26.3",
+ "tauri",
+ "tauri-plugin",
+ "tauri-specta",
+ "thiserror 2.0.12",
+ "timeline",
+ "tokio",
+ "tracing",
  "uuid",
 ]
 

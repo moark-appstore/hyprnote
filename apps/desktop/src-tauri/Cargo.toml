@@ -47,6 +47,7 @@ tauri-plugin-store2 = { workspace = true }
 tauri-plugin-template = { workspace = true }
 tauri-plugin-tray = { workspace = true }
 tauri-plugin-windows = { workspace = true }
+tauri-plugin-gitee-ai = { workspace = true }
 
 tauri = { workspace = true, features = ["specta", "macos-private-api"] }
 tauri-plugin-autostart = "2"
