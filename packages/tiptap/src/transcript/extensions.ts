@@ -1,4 +1,5 @@
 import { Extension } from "@tiptap/core";
+import { splitBlock } from "prosemirror-commands";
 import { Plugin, PluginKey, TextSelection } from "prosemirror-state";
 
 import { WordNode } from "./nodes";
@@ -14,12 +15,7 @@ export const WordSplit = Extension.create({
         key: new PluginKey("hypr-word-split"),
         props: {
           handleKeyDown(view, event) {
-            if (
-              event.key === " "
-              && !event.ctrlKey
-              && !event.metaKey
-              && !event.altKey
-            ) {
+            if (checkKey(" ")(event)) {
               const { state, dispatch } = view;
               const { selection } = state;
 
@@ -57,12 +53,7 @@ export const WordSplit = Extension.create({
               return true;
             }
 
-            if (
-              event.key === "Backspace"
-              && !event.ctrlKey
-              && !event.metaKey
-              && !event.altKey
-            ) {
+            if (checkKey("Backspace")(event)) {
               const { state, dispatch } = view;
               const { selection } = state;
 
@@ -136,18 +127,42 @@ export const SpeakerSplit = Extension.create({
         key: new PluginKey("hypr-speaker-split"),
         props: {
           handleKeyDown(view, event) {
-            if (
-              event.key === "Enter"
-              && !event.ctrlKey
-              && !event.metaKey
-              && !event.altKey
-            ) {
-              const { state } = view;
+            if (checkKey("Enter")(event)) {
+              const { state, dispatch } = view;
               const { selection } = state;
 
               if (!selection.empty) {
                 return false;
               }
+
+              event.preventDefault();
+
+              const WORD = state.schema.nodes[WordNode.name];
+              const $from = selection.$from;
+
+              if ($from.parent.type === WORD) {
+                const isFirstWord = $from.index(1) === 0;
+                const isLastWord = $from.index(1) === $from.node(1).childCount - 1;
+                const isAtEndOfWord = $from.parentOffset === $from.parent.content.size;
+
+                if ((isFirstWord && !isAtEndOfWord) || isLastWord) {
+                  return true;
+                }
+
+                const splitPos = isAtEndOfWord ? $from.after() : $from.before();
+                const tr = state.tr.split(splitPos);
+
+                const newPos = isAtEndOfWord
+                  ? tr.mapping.map(splitPos + 1)
+                  : tr.mapping.map($from.pos);
+
+                const selection = TextSelection.create(tr.doc, newPos);
+                dispatch(tr.setSelection(selection).scrollIntoView());
+
+                return true;
+              }
+
+              return splitBlock(state, dispatch);
             }
 
             return false;
@@ -157,3 +172,10 @@ export const SpeakerSplit = Extension.create({
     ];
   },
 });
+
+const checkKey = (key: string) => (e: KeyboardEvent) => {
+  return e.key === key
+    && !e.ctrlKey
+    && !e.metaKey
+    && !e.altKey;
+};

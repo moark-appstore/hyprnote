@@ -1,4 +1,3 @@
-use std::sync::Arc;
 use std::time::{Duration, Instant};
 
 use statig::prelude::*;
@@ -7,11 +6,10 @@ use tauri::Manager;
 use tauri_specta::Event;
 
 use futures_util::StreamExt;
-use tokio::sync::{mpsc, Mutex};
+use tokio::sync::mpsc;
 use tokio::task::JoinSet;
 
 use hypr_audio::AsyncSource;
-use hypr_timeline::{Timeline, TimelineFilter};
 
 use crate::SessionEvent;
 
@@ -58,7 +56,7 @@ impl Session {
 
             let record = config
                 .as_ref()
-                .map_or(true, |c| c.general.save_recordings.unwrap_or(true));
+                .is_none_or(|c| c.general.save_recordings.unwrap_or(true));
 
             let language = config.as_ref().map_or_else(
                 || hypr_language::ISO639::En.into(),
@@ -95,11 +93,10 @@ impl Session {
             let mut input = hypr_audio::AudioInput::from_mic();
             input.stream()
         };
-        let mic_sample_rate = mic_sample_stream.sample_rate();
         let mut mic_stream = mic_sample_stream.resample(SAMPLE_RATE).chunks(1024);
+        tokio::time::sleep(Duration::from_millis(100)).await;
 
-        let speaker_sample_stream =
-            hypr_audio::AudioInput::from_speaker(Some(mic_sample_rate)).stream();
+        let speaker_sample_stream = hypr_audio::AudioInput::from_speaker(None).stream();
         let mut speaker_stream = speaker_sample_stream.resample(SAMPLE_RATE).chunks(1024);
 
         let chunk_buffer_size: usize = 1024;
@@ -202,14 +199,14 @@ impl Session {
                         .collect();
 
                     for &sample in &mixed {
-                        if let Err(e) = process_tx.send(sample).await {
-                            tracing::error!("process_tx_send_error: {:?}", e.0);
+                        if process_tx.send(sample).await.is_err() {
+                            tracing::error!("process_tx_send_error");
                             return;
                         }
 
                         if record {
-                            if let Err(e) = save_tx.send(sample).await {
-                                tracing::error!("save_tx_send_error: {:?}", e.0);
+                            if save_tx.send(sample).await.is_err() {
+                                tracing::error!("save_tx_send_error");
                             }
                         }
                     }
@@ -245,35 +242,31 @@ impl Session {
             });
         }
 
-        let timeline = Arc::new(Mutex::new(initialize_timeline(&session).await));
+        // TODO
+        // let timeline = Arc::new(Mutex::new(initialize_timeline(&session).await));
         let audio_stream = hypr_audio::ReceiverStreamSource::new(process_rx, SAMPLE_RATE);
 
         let listen_stream = listen_client.from_audio(audio_stream).await?;
 
         tasks.spawn({
             let app = self.app.clone();
-            let timeline = timeline.clone();
             let stop_tx = stop_tx.clone();
 
             async move {
                 futures_util::pin_mut!(listen_stream);
 
                 while let Some(result) = listen_stream.next().await {
-                    let mut timeline = timeline.lock().await;
+                    // We don't have to do this, and inefficient. But this is what works at the moment.
+                    {
+                        let updated_words = update_session(&app, &session.id, result.words)
+                            .await
+                            .unwrap();
 
-                    for t in result.transcripts {
-                        update_session(&app, &session.id, t.clone()).await.unwrap();
-                        timeline.add_transcription(t);
+                        SessionEvent::Words {
+                            words: updated_words,
+                        }
+                        .emit(&app)
                     }
-
-                    for d in result.diarizations {
-                        timeline.add_diarization(d);
-                    }
-
-                    SessionEvent::TimelineView {
-                        view: timeline.view(TimelineFilter::default()),
-                    }
-                    .emit(&app)
                     .unwrap();
                 }
 
@@ -369,26 +362,11 @@ async fn setup_listen_client<R: tauri::Runtime>(
         .build())
 }
 
-async fn initialize_timeline(session: &hypr_db_user::Session) -> Timeline {
-    let mut timeline = Timeline::default();
-
-    for conversation in &session.conversations {
-        for t in &conversation.transcripts {
-            timeline.add_transcription(t.clone());
-        }
-        for d in &conversation.diarizations {
-            timeline.add_diarization(d.clone());
-        }
-    }
-
-    timeline
-}
-
 async fn update_session<R: tauri::Runtime>(
     app: &tauri::AppHandle<R>,
     session_id: impl Into<String>,
-    transcript: hypr_listener_interface::TranscriptChunk,
-) -> Result<(), crate::Error> {
+    words: Vec<hypr_listener_interface::Word>,
+) -> Result<Vec<hypr_listener_interface::Word>, crate::Error> {
     use tauri_plugin_db::DatabasePluginExt;
 
     // TODO: not ideal. We might want to only do "update" everywhere instead of upserts.
@@ -398,16 +376,10 @@ async fn update_session<R: tauri::Runtime>(
         .await?
         .ok_or(crate::Error::NoneSession)?;
 
-    session.conversations.push(hypr_db_user::ConversationChunk {
-        transcripts: vec![transcript],
-        diarizations: vec![],
-        start: chrono::Utc::now(),
-        end: chrono::Utc::now(),
-    });
-
+    session.words.extend(words);
     app.db_upsert_session(session.clone()).await.unwrap();
 
-    Ok(())
+    Ok(session.words)
 }
 
 pub enum StateEvent {
