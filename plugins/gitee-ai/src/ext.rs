@@ -42,6 +42,8 @@ impl Proxy {
 ///
 /// # Example
 /// ```rust
+/// use tauri_plugin_gitee_ai::{Proxy, client};
+///
 /// let proxy = Some(Proxy {
 ///     enabled: true,
 ///     protocol: "http".to_string(),

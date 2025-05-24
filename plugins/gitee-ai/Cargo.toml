@@ -22,7 +22,6 @@ chrono = { workspace = true }
 
 hypr-db-core = { workspace = true }
 hypr-db-user = { workspace = true }
-hypr-timeline = { workspace = true }
 
 specta = { workspace = true }
 tauri = { workspace = true, features = ["test"] }

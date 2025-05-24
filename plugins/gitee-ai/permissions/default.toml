@@ -3,5 +3,8 @@ description = "Default permissions for the plugin"
 permissions = [
   "allow-send-verification-code",
   "allow-verify-code",
-  "allow-get-user-info"
+  "allow-get-user-info",
+  "allow-pay",
+  "allow-get-pay-result",
+  "allow-get-app-info"
 ]

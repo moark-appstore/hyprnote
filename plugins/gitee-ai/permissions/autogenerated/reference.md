@@ -7,6 +7,9 @@ Default permissions for the plugin
 - `allow-send-verification-code`
 - `allow-verify-code`
 - `allow-get-user-info`
+- `allow-pay`
+- `allow-get-pay-result`
+- `allow-get-app-info`
 
 ## Permission Table
 
@@ -16,6 +19,58 @@ Default permissions for the plugin
 <th>Description</th>
 </tr>
 
+
+<tr>
+<td>
+
+`gitee-ai:allow-get-app-info`
+
+</td>
+<td>
+
+Enables the get_app_info command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:deny-get-app-info`
+
+</td>
+<td>
+
+Denies the get_app_info command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:allow-get-pay-result`
+
+</td>
+<td>
+
+Enables the get_pay_result command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:deny-get-pay-result`
+
+</td>
+<td>
+
+Denies the get_pay_result command without any pre-configured scope.
+
+</td>
+</tr>
 
 <tr>
 <td>
@@ -39,6 +94,32 @@ Enables the get_user_info command without any pre-configured scope.
 <td>
 
 Denies the get_user_info command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:allow-pay`
+
+</td>
+<td>
+
+Enables the pay command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:deny-pay`
+
+</td>
+<td>
+
+Denies the pay command without any pre-configured scope.
 
 </td>
 </tr>
