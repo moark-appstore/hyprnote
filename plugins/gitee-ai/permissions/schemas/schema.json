@@ -295,6 +295,30 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the get_app_info command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-app-info",
+          "markdownDescription": "Enables the get_app_info command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the get_app_info command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-app-info",
+          "markdownDescription": "Denies the get_app_info command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the get_pay_result command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-pay-result",
+          "markdownDescription": "Enables the get_pay_result command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the get_pay_result command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-pay-result",
+          "markdownDescription": "Denies the get_pay_result command without any pre-configured scope."
+        },
+        {
           "description": "Enables the get_user_info command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-user-info",
@@ -305,6 +329,18 @@
           "type": "string",
           "const": "deny-get-user-info",
           "markdownDescription": "Denies the get_user_info command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the pay command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-pay",
+          "markdownDescription": "Enables the pay command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the pay command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-pay",
+          "markdownDescription": "Denies the pay command without any pre-configured scope."
         },
         {
           "description": "Enables the send_verification_code command without any pre-configured scope.",
@@ -331,10 +367,10 @@
           "markdownDescription": "Denies the verify_code command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-send-verification-code`\n- `allow-verify-code`\n- `allow-get-user-info`",
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-send-verification-code`\n- `allow-verify-code`\n- `allow-get-user-info`\n- `allow-pay`\n- `allow-get-pay-result`\n- `allow-get-app-info`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-send-verification-code`\n- `allow-verify-code`\n- `allow-get-user-info`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-send-verification-code`\n- `allow-verify-code`\n- `allow-get-user-info`\n- `allow-pay`\n- `allow-get-pay-result`\n- `allow-get-app-info`"
         }
       ]
     }

@@ -6,8 +6,10 @@ import { NewNoteButton } from "@/components/toolbar/buttons/new-note-button";
 import { NewWindowButton } from "@/components/toolbar/buttons/new-window-button";
 import { useLeftSidebar } from "@/contexts";
 import { commands as flagsCommands } from "@hypr/plugin-flags";
+import { commands as windowsCommands } from "@hypr/plugin-windows";
 import { getCurrentWebviewWindowLabel } from "@hypr/plugin-windows";
 import { cn } from "@hypr/ui/lib/utils";
+import { Button } from "@hypr/ui/components/ui/button";
 import { SearchBar } from "../../search-bar";
 import { ChatPanelButton } from "../buttons/chat-panel-button";
 import { LeftSidebarButton } from "../buttons/left-sidebar-button";
@@ -29,6 +31,10 @@ export function MainToolbar() {
     queryKey: ["flags", "ChatRightPanel"],
     queryFn: () => flagsCommands.isEnabled("ChatRightPanel"),
   });
+
+  const handleUpgradePro = () => {
+    windowsCommands.windowShow({ type: "subscription" });
+  };
 
   return (
     <header
@@ -60,6 +66,9 @@ export function MainToolbar() {
         className="flex w-40 items-center justify-end"
         data-tauri-drag-region
       >
+        <Button size="sm" className="mr-2" onClick={handleUpgradePro}>
+          升级 Pro
+        </Button>
         {isMain && (
           <>
             {/* {isNote && <ShareButton />} */}

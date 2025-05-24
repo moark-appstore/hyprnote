@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as VideoImport } from './routes/video'
 import { Route as AppImport } from './routes/app'
 import { Route as AppIndexImport } from './routes/app.index'
+import { Route as AppSubscriptionImport } from './routes/app.subscription'
 import { Route as AppSettingsImport } from './routes/app.settings'
 import { Route as AppPlansImport } from './routes/app.plans'
 import { Route as AppNewImport } from './routes/app.new'
@@ -39,6 +40,12 @@ const AppRoute = AppImport.update({
 const AppIndexRoute = AppIndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+
+const AppSubscriptionRoute = AppSubscriptionImport.update({
+  id: '/subscription',
+  path: '/subscription',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -130,6 +137,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsImport
       parentRoute: typeof AppImport
     }
+    '/app/subscription': {
+      id: '/app/subscription'
+      path: '/subscription'
+      fullPath: '/app/subscription'
+      preLoaderRoute: typeof AppSubscriptionImport
+      parentRoute: typeof AppImport
+    }
     '/app/': {
       id: '/app/'
       path: '/'
@@ -168,6 +182,7 @@ interface AppRouteChildren {
   AppNewRoute: typeof AppNewRoute
   AppPlansRoute: typeof AppPlansRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppSubscriptionRoute: typeof AppSubscriptionRoute
   AppIndexRoute: typeof AppIndexRoute
   AppHumanIdRoute: typeof AppHumanIdRoute
   AppNoteIdRoute: typeof AppNoteIdRoute
@@ -179,6 +194,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppNewRoute: AppNewRoute,
   AppPlansRoute: AppPlansRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppSubscriptionRoute: AppSubscriptionRoute,
   AppIndexRoute: AppIndexRoute,
   AppHumanIdRoute: AppHumanIdRoute,
   AppNoteIdRoute: AppNoteIdRoute,
@@ -194,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/app/new': typeof AppNewRoute
   '/app/plans': typeof AppPlansRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/subscription': typeof AppSubscriptionRoute
   '/app/': typeof AppIndexRoute
   '/app/human/$id': typeof AppHumanIdRoute
   '/app/note/$id': typeof AppNoteIdRoute
@@ -206,6 +223,7 @@ export interface FileRoutesByTo {
   '/app/new': typeof AppNewRoute
   '/app/plans': typeof AppPlansRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/subscription': typeof AppSubscriptionRoute
   '/app': typeof AppIndexRoute
   '/app/human/$id': typeof AppHumanIdRoute
   '/app/note/$id': typeof AppNoteIdRoute
@@ -220,6 +238,7 @@ export interface FileRoutesById {
   '/app/new': typeof AppNewRoute
   '/app/plans': typeof AppPlansRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/subscription': typeof AppSubscriptionRoute
   '/app/': typeof AppIndexRoute
   '/app/human/$id': typeof AppHumanIdRoute
   '/app/note/$id': typeof AppNoteIdRoute
@@ -235,6 +254,7 @@ export interface FileRouteTypes {
     | '/app/new'
     | '/app/plans'
     | '/app/settings'
+    | '/app/subscription'
     | '/app/'
     | '/app/human/$id'
     | '/app/note/$id'
@@ -246,6 +266,7 @@ export interface FileRouteTypes {
     | '/app/new'
     | '/app/plans'
     | '/app/settings'
+    | '/app/subscription'
     | '/app'
     | '/app/human/$id'
     | '/app/note/$id'
@@ -258,6 +279,7 @@ export interface FileRouteTypes {
     | '/app/new'
     | '/app/plans'
     | '/app/settings'
+    | '/app/subscription'
     | '/app/'
     | '/app/human/$id'
     | '/app/note/$id'
@@ -296,6 +318,7 @@ export const routeTree = rootRoute
         "/app/new",
         "/app/plans",
         "/app/settings",
+        "/app/subscription",
         "/app/",
         "/app/human/$id",
         "/app/note/$id",
@@ -319,6 +342,10 @@ export const routeTree = rootRoute
     },
     "/app/settings": {
       "filePath": "app.settings.tsx",
+      "parent": "/app"
+    },
+    "/app/subscription": {
+      "filePath": "app.subscription.tsx",
       "parent": "/app"
     },
     "/app/": {
