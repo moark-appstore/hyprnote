@@ -26,6 +26,14 @@ pub struct GiteeAiError {
     pub message: String,
 }
 
+impl std::fmt::Display for GiteeAiError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Gitee AI API Error {}: {}", self.code, self.message)
+    }
+}
+
+impl std::error::Error for GiteeAiError {}
+
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]
 pub struct GiteeAiPayDetail {
     pub ident: String,
@@ -135,4 +143,19 @@ pub struct GiteeAiAppInfo {
     pub name: String,
     pub status: GiteeAiAppStatus,
     pub payment_plans: Vec<GiteeAiAppPaymentPlan>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Type)]
+pub struct GiteeAiTokenInfo {
+    pub token: String,
+    pub user_email: String,
+    pub created_at: i64,
+    pub updated_at: i64,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Type)]
+pub struct GiteeAiLoginStatus {
+    pub is_logged_in: bool,
+    pub user_info: Option<GiteeAiUser>,
+    pub token_info: Option<GiteeAiTokenInfo>,
 }

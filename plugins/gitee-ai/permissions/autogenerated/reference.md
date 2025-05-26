@@ -10,6 +10,9 @@ Default permissions for the plugin
 - `allow-pay`
 - `allow-get-pay-result`
 - `allow-get-app-info`
+- `allow-save-token`
+- `allow-get-login-status`
+- `allow-logout`
 
 ## Permission Table
 
@@ -42,6 +45,32 @@ Enables the get_app_info command without any pre-configured scope.
 <td>
 
 Denies the get_app_info command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:allow-get-login-status`
+
+</td>
+<td>
+
+Enables the get_login_status command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:deny-get-login-status`
+
+</td>
+<td>
+
+Denies the get_login_status command without any pre-configured scope.
 
 </td>
 </tr>
@@ -101,6 +130,32 @@ Denies the get_user_info command without any pre-configured scope.
 <tr>
 <td>
 
+`gitee-ai:allow-logout`
+
+</td>
+<td>
+
+Enables the logout command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:deny-logout`
+
+</td>
+<td>
+
+Denies the logout command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `gitee-ai:allow-pay`
 
 </td>
@@ -120,6 +175,32 @@ Enables the pay command without any pre-configured scope.
 <td>
 
 Denies the pay command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:allow-save-token`
+
+</td>
+<td>
+
+Enables the save_token command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:deny-save-token`
+
+</td>
+<td>
+
+Denies the save_token command without any pre-configured scope.
 
 </td>
 </tr>

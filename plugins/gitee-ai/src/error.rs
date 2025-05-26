@@ -1,39 +1,47 @@
-use serde::{ser::Serializer, Serialize};
+use serde::{Deserialize, Serialize};
+use specta::Type;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, thiserror::Error, Serialize, Deserialize, Type)]
+#[serde(tag = "type", content = "data")]
 pub enum Error {
-    #[error(transparent)]
-    ReqwestError(#[from] reqwest::Error),
-    #[error(transparent)]
-    JsonError(#[from] serde_json::Error),
-    #[error("API error: {code} - {message}")]
-    ApiError { code: i32, message: String },
-    #[error("Unknown error: {0}")]
+    #[error("Request failed: {0}")]
+    Request(String),
+
+    #[error("JSON parsing failed: {0}")]
+    Json(String),
+
+    #[error("Gitee AI API error: {0}")]
+    GiteeAi(#[from] crate::types::GiteeAiError),
+
+    #[error("Store error: {0}")]
+    Store(String),
+
+    #[error("{0}")]
     Other(String),
 }
 
-impl Serialize for Error {
-    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        serializer.serialize_str(self.to_string().as_ref())
+impl From<reqwest::Error> for Error {
+    fn from(e: reqwest::Error) -> Self {
+        Error::Request(e.to_string())
     }
 }
 
-impl From<crate::types::GiteeAiError> for Error {
-    fn from(error: crate::types::GiteeAiError) -> Self {
-        Error::ApiError {
-            code: error.code,
-            message: error.message,
-        }
+impl From<serde_json::Error> for Error {
+    fn from(e: serde_json::Error) -> Self {
+        Error::Json(e.to_string())
+    }
+}
+
+impl From<tauri_plugin_store2::Error> for Error {
+    fn from(e: tauri_plugin_store2::Error) -> Self {
+        Error::Store(e.to_string())
     }
 }
 
 impl From<String> for Error {
-    fn from(error: String) -> Self {
-        Error::Other(error)
+    fn from(s: String) -> Self {
+        Error::Other(s)
     }
 }

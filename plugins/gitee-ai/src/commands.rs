@@ -1,5 +1,7 @@
 use crate::ext::GiteeAiPluginExt;
-use crate::types::{GiteeAiAppInfo, GiteeAiPayDetail, GiteeAiPayResult, GiteeAiUser};
+use crate::types::{
+    GiteeAiAppInfo, GiteeAiLoginStatus, GiteeAiPayDetail, GiteeAiPayResult, GiteeAiUser,
+};
 use tauri::Runtime;
 
 #[tauri::command]
@@ -57,4 +59,28 @@ pub async fn get_pay_result<R: Runtime>(
 #[specta::specta]
 pub async fn get_app_info<R: Runtime>(app: tauri::AppHandle<R>) -> Result<GiteeAiAppInfo, String> {
     app.get_app_info().await.map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn save_token<R: Runtime>(app: tauri::AppHandle<R>, token: String) -> Result<(), String> {
+    app.save_gitee_ai_token(token)
+        .await
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn get_login_status<R: Runtime>(
+    app: tauri::AppHandle<R>,
+) -> Result<GiteeAiLoginStatus, String> {
+    app.get_gitee_ai_login_status()
+        .await
+        .map_err(|e| e.to_string())
+}
+
+#[tauri::command]
+#[specta::specta]
+pub async fn logout<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
+    app.logout_gitee_ai().await.map_err(|e| e.to_string())
 }

@@ -13120,8 +13120,6 @@ name = "tauri-plugin-gitee-ai"
 version = "0.0.1"
 dependencies = [
  "chrono",
- "db-core",
- "db-user",
  "reqwest 0.12.15",
  "serde",
  "serde_json",
@@ -13130,9 +13128,9 @@ dependencies = [
  "strum 0.26.3",
  "tauri",
  "tauri-plugin",
+ "tauri-plugin-store2",
  "tauri-specta",
  "thiserror 2.0.12",
- "timeline",
  "tokio",
  "tracing",
  "uuid",

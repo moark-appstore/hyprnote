@@ -8,7 +8,7 @@ import {
 } from "@hypr/ui/components/ui/modal";
 import { Loader2, CheckCircle, XCircle, Crown } from "lucide-react";
 import { AliPayIcon, WePayIcon } from "./PaymentIcons";
-import { GiteeAiPayDetail, GiteeAiPayResult } from "@hypr/plugin-gitee-ai";
+import { GiteeAiPayResult } from "@hypr/plugin-gitee-ai";
 
 type PaymentStatus =
   | "idle"

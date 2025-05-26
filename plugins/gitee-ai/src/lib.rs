@@ -1,13 +1,15 @@
-use tauri::{plugin::Builder, Manager, Runtime};
+use tauri::{plugin::Builder, Runtime};
 
 const PLUGIN_NAME: &str = "gitee-ai";
 mod commands;
 mod error;
 mod ext;
+mod store;
 mod types;
 
 pub use error::*;
 pub use ext::{client, GiteeAiPluginExt, Proxy};
+pub use store::StoreKey;
 
 fn make_specta_builder<R: tauri::Runtime>() -> tauri_specta::Builder<R> {
     tauri_specta::Builder::<R>::new()
@@ -19,6 +21,9 @@ fn make_specta_builder<R: tauri::Runtime>() -> tauri_specta::Builder<R> {
             commands::pay::<tauri::Wry>,
             commands::get_pay_result::<tauri::Wry>,
             commands::get_app_info::<tauri::Wry>,
+            commands::save_token::<tauri::Wry>,
+            commands::get_login_status::<tauri::Wry>,
+            commands::logout::<tauri::Wry>,
         ])
         .error_handling(tauri_specta::ErrorHandlingMode::Throw)
 }
@@ -28,10 +33,7 @@ pub fn init<R: Runtime>() -> tauri::plugin::TauriPlugin<R> {
 
     Builder::<R>::new(PLUGIN_NAME)
         .invoke_handler(specta_builder.invoke_handler())
-        .setup(|app_handle, _api| {
-            // 配置已在ext.rs中硬编码，不需要管理状态
-            Ok(())
-        })
+        .setup(|_app_handle, _api| Ok(()))
         .build()
 }
 

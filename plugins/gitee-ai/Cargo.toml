@@ -20,8 +20,7 @@ serde_json = { workspace = true }
 reqwest = { workspace = true, features = ["json"] }
 chrono = { workspace = true }
 
-hypr-db-core = { workspace = true }
-hypr-db-user = { workspace = true }
+tauri-plugin-store2 = { path = "../store2" }
 
 specta = { workspace = true }
 tauri = { workspace = true, features = ["test"] }
