@@ -17,11 +17,19 @@ import {
   SettingsProvider,
   useLeftSidebar,
   useRightPanel,
+  GiteeAiProvider,
 } from "@/contexts";
 import { commands } from "@/types";
 import { commands as listenerCommands } from "@hypr/plugin-listener";
-import { events as windowsEvents, getCurrentWebviewWindowLabel } from "@hypr/plugin-windows";
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@hypr/ui/components/ui/resizable";
+import {
+  events as windowsEvents,
+  getCurrentWebviewWindowLabel,
+} from "@hypr/plugin-windows";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@hypr/ui/components/ui/resizable";
 import { OngoingSessionProvider, SessionsProvider } from "@hypr/utils/contexts";
 
 export const Route = createFileRoute("/app")({
@@ -34,13 +42,14 @@ export const Route = createFileRoute("/app")({
 
 function Component() {
   const router = useRouter();
-  const { sessionsStore, ongoingSessionStore, isOnboardingNeeded } = Route.useLoaderData();
+  const { sessionsStore, ongoingSessionStore, isOnboardingNeeded } =
+    Route.useLoaderData();
 
   const windowLabel = getCurrentWebviewWindowLabel();
   const showNotifications = windowLabel === "main" && !isOnboardingNeeded;
 
   return (
-    <>
+    <GiteeAiProvider>
       <HyprProvider>
         <SessionsProvider store={sessionsStore}>
           <OngoingSessionProvider store={ongoingSessionStore}>
@@ -87,7 +96,7 @@ function Component() {
         </SessionsProvider>
       </HyprProvider>
       {showNotifications && <Notifications />}
-    </>
+    </GiteeAiProvider>
   );
 }
 

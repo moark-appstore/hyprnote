@@ -1,4 +1,5 @@
 export * from "./edit-mode-context";
+export * from "./gitee-ai";
 export * from "./hypr";
 export * from "./left-sidebar";
 export * from "./login-modal";

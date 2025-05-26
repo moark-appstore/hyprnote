@@ -6,5 +6,8 @@ permissions = [
   "allow-get-user-info",
   "allow-pay",
   "allow-get-pay-result",
-  "allow-get-app-info"
+  "allow-get-app-info",
+  "allow-save-token",
+  "allow-get-login-status",
+  "allow-logout"
 ]

@@ -24,6 +24,15 @@ async getPayResult(ident: string) : Promise<GiteeAiPayResult> {
 },
 async getAppInfo() : Promise<GiteeAiAppInfo> {
     return await TAURI_INVOKE("plugin:gitee-ai|get_app_info");
+},
+async saveToken(token: string) : Promise<null> {
+    return await TAURI_INVOKE("plugin:gitee-ai|save_token", { token });
+},
+async getLoginStatus() : Promise<GiteeAiLoginStatus> {
+    return await TAURI_INVOKE("plugin:gitee-ai|get_login_status");
+},
+async logout() : Promise<null> {
+    return await TAURI_INVOKE("plugin:gitee-ai|logout");
 }
 }
 
@@ -40,10 +49,12 @@ async getAppInfo() : Promise<GiteeAiAppInfo> {
 export type GiteeAiAppInfo = { appid: string; name: string; status: GiteeAiAppStatus; payment_plans: GiteeAiAppPaymentPlan[] }
 export type GiteeAiAppPaymentPlan = { ident: string; name: string; period: GiteeAiPaymentPeriod; period_type: number; period_quantity: number; calls_limit: number; price: number; description: string }
 export type GiteeAiAppStatus = "DRAFT" | "UNDER_REVIEW" | "PENDING_RELEASE" | "PUBLISHED" | "REMOVED" | "DELETED"
+export type GiteeAiLoginStatus = { is_logged_in: boolean; user_info: GiteeAiUser | null; token_info: GiteeAiTokenInfo | null }
 export type GiteeAiPayDetail = { ident: string; status: string; redirect_type: string; url: string }
 export type GiteeAiPayResult = { ident: string; amount: number; price: number; pay_type: string; status: string }
 export type GiteeAiPaymentPeriod = "YEAR" | "MONTH" | "DAY" | "NONE"
 export type GiteeAiSubscription = { pay_plan_ident: string; expired_at: number; status: string }
+export type GiteeAiTokenInfo = { token: string; user_email: string; created_at: number; updated_at: number }
 export type GiteeAiUser = { mobile: string; email: string; status: string; purchase_status: string; pay_plan_ident: string; created_at: number; usage_expired_at: number; subscriptions: GiteeAiSubscription[] }
 
 /** tauri-specta globals **/

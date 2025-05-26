@@ -3,17 +3,23 @@ import { Input } from "@hypr/ui/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
 import { commands as giteeAiCommands } from "@hypr/plugin-gitee-ai";
+import { useGiteeAi } from "@/contexts/gitee-ai";
 
 interface RegisterFormProps {
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export function RegisterForm({ onClose }: RegisterFormProps) {
+export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSendingCode, setIsSendingCode] = useState(false);
   const [countdown, setCountdown] = useState(0);
+
+  const { checkLoginStatus } = useGiteeAi((s) => ({
+    checkLoginStatus: s.checkLoginStatus,
+  }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +34,15 @@ export function RegisterForm({ onClose }: RegisterFormProps) {
 
       console.log(result);
       toast.success("登陆成功");
-      onClose();
+
+      // 刷新登录状态
+      await checkLoginStatus();
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        onClose();
+      }
     } catch (error) {
       console.error(error);
       toast.error(JSON.stringify(error));
@@ -80,6 +94,7 @@ export function RegisterForm({ onClose }: RegisterFormProps) {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
             />
           </div>
           <div className="space-y-2">
