@@ -141,13 +141,13 @@ export function PaymentModal({
                   <div className="flex items-center justify-center space-x-3 text-sm text-green-600 bg-white/60 py-2 px-4 rounded-lg">
                     <CheckCircle className="w-4 h-4" />
                     <div className="flex items-center space-x-2">
-                      {paymentResult.pay_type === "alipay" ? (
+                      {paymentResult.type === "alipay" ? (
                         <AliPayIcon />
                       ) : (
                         <WePayIcon />
                       )}
                       <span>
-                        {paymentResult.pay_type === "alipay"
+                        {paymentResult.type === "alipay"
                           ? "支付宝"
                           : "微信支付"}
                       </span>

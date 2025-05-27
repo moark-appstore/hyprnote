@@ -15,6 +15,7 @@ specta-typescript = { workspace = true }
 
 [dependencies]
 tauri-plugin-auth = { workspace = true }
+tauri-plugin-gitee-ai = { workspace = true }
 tauri-plugin-local-llm = { workspace = true }
 tauri-plugin-local-stt = { workspace = true }
 

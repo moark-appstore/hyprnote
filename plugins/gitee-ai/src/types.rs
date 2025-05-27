@@ -12,8 +12,8 @@ pub struct GiteeAiSubscription {
 pub struct GiteeAiUser {
     pub mobile: String,
     pub email: String,
-    pub status: String,
-    pub purchase_status: String,
+    pub status: GiteeAiUserStatus,
+    pub purchase_status: GiteeAiUserPurchaseStatus,
     pub pay_plan_ident: String,
     pub created_at: i64,
     pub usage_expired_at: i64,
@@ -37,10 +37,69 @@ pub struct GiteeAiPayDetail {
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]
 pub struct GiteeAiPayResult {
     pub ident: String,
-    pub amount: u32,
+    pub amount: f64,
     pub price: f64,
+    #[serde(rename = "type")]
     pub pay_type: String,
     pub status: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Type)]
+pub enum GiteeAiUserPurchaseStatus {
+    #[serde(rename = "ACTIVE")]
+    Active,
+    #[serde(rename = "EXPIRED")]
+    Expired,
+    #[serde(rename = "EXHAUSTED")]
+    Exhausted,
+    #[serde(rename = "NOT_PURCHASED")]
+    NotPurchased,
+}
+
+impl GiteeAiUserPurchaseStatus {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            GiteeAiUserPurchaseStatus::Active => "ACTIVE",
+            GiteeAiUserPurchaseStatus::Expired => "EXPIRED",
+            GiteeAiUserPurchaseStatus::Exhausted => "EXHAUSTED",
+            GiteeAiUserPurchaseStatus::NotPurchased => "NOT_PURCHASED",
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        match s {
+            "ACTIVE" => GiteeAiUserPurchaseStatus::Active,
+            "EXPIRED" => GiteeAiUserPurchaseStatus::Expired,
+            "EXHAUSTED" => GiteeAiUserPurchaseStatus::Exhausted,
+            "NOT_PURCHASED" => GiteeAiUserPurchaseStatus::NotPurchased,
+            _ => GiteeAiUserPurchaseStatus::Exhausted,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, Type)]
+pub enum GiteeAiUserStatus {
+    #[serde(rename = "NORMAL")]
+    Normal,
+    #[serde(rename = "DISABLED")]
+    Disabled,
+}
+
+impl GiteeAiUserStatus {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            GiteeAiUserStatus::Normal => "NORMAL",
+            GiteeAiUserStatus::Disabled => "DISABLED",
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        match s {
+            "NORMAL" => GiteeAiUserStatus::Normal,
+            "DISABLED" => GiteeAiUserStatus::Disabled,
+            _ => GiteeAiUserStatus::Normal,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, Type)]

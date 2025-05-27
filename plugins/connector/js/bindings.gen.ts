@@ -50,7 +50,7 @@ async getSttConnection() : Promise<ConnectionSTT> {
 /** user-defined types **/
 
 export type Connection = { api_base: string; api_key: string | null }
-export type ConnectionLLM = { type: "HyprCloud"; connection: Connection } | { type: "HyprLocal"; connection: Connection } | { type: "Custom"; connection: Connection }
+export type ConnectionLLM = { type: "HyprCloud"; connection: Connection } | { type: "HyprLocal"; connection: Connection } | { type: "Custom"; connection: Connection } | { type: "GiteeAi"; connection: Connection }
 export type ConnectionSTT = { type: "HyprCloud"; connection: Connection } | { type: "HyprLocal"; connection: Connection }
 
 /** tauri-specta globals **/

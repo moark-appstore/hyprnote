@@ -10,6 +10,7 @@ pub enum ConnectionLLM {
     HyprCloud(Connection),
     HyprLocal(Connection),
     Custom(Connection),
+    GiteeAi(Connection),
 }
 
 #[derive(Debug, serde::Deserialize, serde::Serialize, specta::Type)]
@@ -25,6 +26,7 @@ impl From<ConnectionLLM> for Connection {
             ConnectionLLM::HyprCloud(conn) => conn,
             ConnectionLLM::HyprLocal(conn) => conn,
             ConnectionLLM::Custom(conn) => conn,
+            ConnectionLLM::GiteeAi(conn) => conn,
         }
     }
 }
@@ -35,6 +37,7 @@ impl AsRef<Connection> for ConnectionLLM {
             ConnectionLLM::HyprCloud(conn) => conn,
             ConnectionLLM::HyprLocal(conn) => conn,
             ConnectionLLM::Custom(conn) => conn,
+            ConnectionLLM::GiteeAi(conn) => conn,
         }
     }
 }
