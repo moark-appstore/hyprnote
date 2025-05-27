@@ -10,6 +10,7 @@ mod types;
 pub use error::*;
 pub use ext::{client, GiteeAiPluginExt, Proxy};
 pub use store::StoreKey;
+pub use types::*;
 
 fn make_specta_builder<R: tauri::Runtime>() -> tauri_specta::Builder<R> {
     tauri_specta::Builder::<R>::new()
