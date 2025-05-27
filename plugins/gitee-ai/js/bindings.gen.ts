@@ -64,6 +64,11 @@ export type GiteeAiAppStatus =
   | "PUBLISHED"
   | "REMOVED"
   | "DELETED";
+export type GiteeAiLoginStatus = {
+  is_logged_in: boolean;
+  user_info: GiteeAiUser | null;
+  token_info: GiteeAiTokenInfo | null;
+};
 export type GiteeAiPayDetail = {
   ident: string;
   status: string;
