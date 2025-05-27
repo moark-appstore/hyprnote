@@ -12989,6 +12989,7 @@ dependencies = [
  "tauri-plugin",
  "tauri-plugin-auth",
  "tauri-plugin-flags",
+ "tauri-plugin-gitee-ai",
  "tauri-plugin-local-llm",
  "tauri-plugin-local-stt",
  "tauri-plugin-store2",

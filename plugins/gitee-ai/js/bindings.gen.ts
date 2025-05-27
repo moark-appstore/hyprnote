@@ -51,11 +51,13 @@ export type GiteeAiAppPaymentPlan = { ident: string; name: string; period: Gitee
 export type GiteeAiAppStatus = "DRAFT" | "UNDER_REVIEW" | "PENDING_RELEASE" | "PUBLISHED" | "REMOVED" | "DELETED"
 export type GiteeAiLoginStatus = { is_logged_in: boolean; user_info: GiteeAiUser | null; token_info: GiteeAiTokenInfo | null }
 export type GiteeAiPayDetail = { ident: string; status: string; redirect_type: string; url: string }
-export type GiteeAiPayResult = { ident: string; amount: number; price: number; pay_type: string; status: string }
+export type GiteeAiPayResult = { ident: string; amount: number; price: number; type: string; status: string }
 export type GiteeAiPaymentPeriod = "YEAR" | "MONTH" | "DAY" | "NONE"
 export type GiteeAiSubscription = { pay_plan_ident: string; expired_at: number; status: string }
 export type GiteeAiTokenInfo = { token: string; user_email: string; created_at: number; updated_at: number }
-export type GiteeAiUser = { mobile: string; email: string; status: string; purchase_status: string; pay_plan_ident: string; created_at: number; usage_expired_at: number; subscriptions: GiteeAiSubscription[] }
+export type GiteeAiUser = { mobile: string; email: string; status: GiteeAiUserStatus; purchase_status: GiteeAiUserPurchaseStatus; pay_plan_ident: string; created_at: number; usage_expired_at: number; subscriptions: GiteeAiSubscription[] }
+export type GiteeAiUserPurchaseStatus = "ACTIVE" | "EXPIRED" | "EXHAUSTED" | "NOT_PURCHASED"
+export type GiteeAiUserStatus = "NORMAL" | "DISABLED"
 
 /** tauri-specta globals **/
 

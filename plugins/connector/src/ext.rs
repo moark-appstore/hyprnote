@@ -105,44 +105,74 @@ impl<R: tauri::Runtime, T: tauri::Manager<R>> ConnectorPluginExt<R> for T {
     }
 
     async fn get_llm_connection(&self) -> Result<ConnectionLLM, crate::Error> {
+        // 注释掉云预览功能检查
+        // {
+        //     use tauri_plugin_flags::{FlagsPluginExt, StoreKey as FlagsStoreKey};
+
+        //     if self
+        //         .is_enabled(FlagsStoreKey::CloudPreview)
+        //         .unwrap_or(false)
+        //     {
+        //         let api_base = if cfg!(debug_assertions) {
+        //             "http://127.0.0.1:1234".to_string()
+        //         } else {
+        //             "https://app.hyprnote.com".to_string()
+        //         };
+
+        //         return Ok(ConnectionLLM::HyprCloud(Connection {
+        //             api_base,
+        //             api_key: None,
+        //         }));
+        //     }
+        // }
+
+        // 注释掉 OAuth 认证检查
+        // {
+        //     use tauri_plugin_auth::{AuthPluginExt, StoreKey, VaultKey};
+
+        //     if let Ok(Some(_)) = self.get_from_store(StoreKey::AccountId) {
+        //         let api_base = if cfg!(debug_assertions) {
+        //             "http://127.0.0.1:1234".to_string()
+        //         } else {
+        //             "https://app.hyprnote.com".to_string()
+        //         };
+
+        //         let api_key = if cfg!(debug_assertions) {
+        //             None
+        //         } else {
+        //             self.get_from_vault(VaultKey::RemoteServer)?
+        //         };
+
+        //         let conn = ConnectionLLM::HyprCloud(Connection { api_base, api_key });
+        //         return Ok(conn);
+        //     }
+        // }
+
+        // 检查 gitee-ai 登录状态
         {
-            use tauri_plugin_flags::{FlagsPluginExt, StoreKey as FlagsStoreKey};
+            use tauri_plugin_gitee_ai::{
+                GiteeAiPluginExt, GiteeAiUserPurchaseStatus, GiteeAiUserStatus,
+            };
 
-            if self
-                .is_enabled(FlagsStoreKey::CloudPreview)
-                .unwrap_or(false)
-            {
-                let api_base = if cfg!(debug_assertions) {
-                    "http://127.0.0.1:1234".to_string()
-                } else {
-                    "https://app.hyprnote.com".to_string()
-                };
+            if let Ok(login_status) = self.get_gitee_ai_login_status().await {
+                if login_status.is_logged_in {
+                    if let Some(user_info) = login_status.user_info {
+                        // 检查用户状态是否正常且已购买
+                        let is_normal = matches!(user_info.status, GiteeAiUserStatus::Normal);
+                        let is_purchased =
+                            matches!(user_info.purchase_status, GiteeAiUserPurchaseStatus::Active);
 
-                return Ok(ConnectionLLM::HyprCloud(Connection {
-                    api_base,
-                    api_key: None,
-                }));
-            }
-        }
-
-        {
-            use tauri_plugin_auth::{AuthPluginExt, StoreKey, VaultKey};
-
-            if let Ok(Some(_)) = self.get_from_store(StoreKey::AccountId) {
-                let api_base = if cfg!(debug_assertions) {
-                    "http://127.0.0.1:1234".to_string()
-                } else {
-                    "https://app.hyprnote.com".to_string()
-                };
-
-                let api_key = if cfg!(debug_assertions) {
-                    None
-                } else {
-                    self.get_from_vault(VaultKey::RemoteServer)?
-                };
-
-                let conn = ConnectionLLM::HyprCloud(Connection { api_base, api_key });
-                return Ok(conn);
+                        if is_normal && is_purchased {
+                            if let Some(token_info) = login_status.token_info {
+                                let conn = ConnectionLLM::GiteeAi(Connection {
+                                    api_base: "https://ai.gitee.com/v1".to_string(),
+                                    api_key: Some(token_info.token),
+                                });
+                                return Ok(conn);
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -167,46 +197,48 @@ impl<R: tauri::Runtime, T: tauri::Manager<R>> ConnectorPluginExt<R> for T {
     }
 
     async fn get_stt_connection(&self) -> Result<ConnectionSTT, crate::Error> {
-        {
-            use tauri_plugin_flags::{FlagsPluginExt, StoreKey as FlagsStoreKey};
+        // 注释掉云预览功能检查
+        // {
+        //     use tauri_plugin_flags::{FlagsPluginExt, StoreKey as FlagsStoreKey};
 
-            if self
-                .is_enabled(FlagsStoreKey::CloudPreview)
-                .unwrap_or(false)
-            {
-                let api_base = if cfg!(debug_assertions) {
-                    "http://127.0.0.1:1234".to_string()
-                } else {
-                    "https://app.hyprnote.com".to_string()
-                };
+        //     if self
+        //         .is_enabled(FlagsStoreKey::CloudPreview)
+        //         .unwrap_or(false)
+        //     {
+        //         let api_base = if cfg!(debug_assertions) {
+        //             "http://127.0.0.1:1234".to_string()
+        //         } else {
+        //             "https://app.hyprnote.com".to_string()
+        //         };
 
-                return Ok(ConnectionSTT::HyprCloud(Connection {
-                    api_base,
-                    api_key: None,
-                }));
-            }
-        }
+        //         return Ok(ConnectionSTT::HyprCloud(Connection {
+        //             api_base,
+        //             api_key: None,
+        //         }));
+        //     }
+        // }
 
-        {
-            use tauri_plugin_auth::{AuthPluginExt, StoreKey, VaultKey};
+        // 注释掉 OAuth 认证检查
+        // {
+        //     use tauri_plugin_auth::{AuthPluginExt, StoreKey, VaultKey};
 
-            if let Ok(Some(_)) = self.get_from_store(StoreKey::AccountId) {
-                let api_base = if cfg!(debug_assertions) {
-                    "http://127.0.0.1:1234".to_string()
-                } else {
-                    "https://app.hyprnote.com".to_string()
-                };
+        //     if let Ok(Some(_)) = self.get_from_store(StoreKey::AccountId) {
+        //         let api_base = if cfg!(debug_assertions) {
+        //             "http://127.0.0.1:1234".to_string()
+        //         } else {
+        //             "https://app.hyprnote.com".to_string()
+        //         };
 
-                let api_key = if cfg!(debug_assertions) {
-                    None
-                } else {
-                    self.get_from_vault(VaultKey::RemoteServer)?
-                };
+        //         let api_key = if cfg!(debug_assertions) {
+        //             None
+        //         } else {
+        //             self.get_from_vault(VaultKey::RemoteServer)?
+        //         };
 
-                let conn = ConnectionSTT::HyprCloud(Connection { api_base, api_key });
-                return Ok(conn);
-            }
-        }
+        //         let conn = ConnectionSTT::HyprCloud(Connection { api_base, api_key });
+        //         return Ok(conn);
+        //     }
+        // }
 
         {
             use tauri_plugin_local_stt::{LocalSttPluginExt, SharedState};
