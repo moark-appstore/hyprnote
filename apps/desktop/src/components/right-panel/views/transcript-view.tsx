@@ -1,26 +1,32 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMatch } from "@tanstack/react-router";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
-import { AudioLinesIcon, ClipboardIcon, Copy, TextSearchIcon, UploadIcon } from "lucide-react";
+import { AudioLinesIcon, CheckIcon, ClipboardIcon, CopyIcon, TextSearchIcon, UploadIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { ParticipantsChipInner } from "@/components/editor-area/note-header/chips/participants-chip";
+import { useHypr } from "@/contexts";
 import { commands as dbCommands, Human, Word } from "@hypr/plugin-db";
 import { commands as miscCommands } from "@hypr/plugin-misc";
-import TranscriptEditor, { type SpeakerViewInnerProps, type TranscriptEditorRef } from "@hypr/tiptap/transcript";
+import TranscriptEditor, {
+  type SpeakerChangeRange,
+  type SpeakerViewInnerProps,
+  type TranscriptEditorRef,
+} from "@hypr/tiptap/transcript";
 import { Button } from "@hypr/ui/components/ui/button";
 import { Input } from "@hypr/ui/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@hypr/ui/components/ui/popover";
 import { Spinner } from "@hypr/ui/components/ui/spinner";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@hypr/ui/components/ui/tooltip";
-import { useOngoingSession, useSessions } from "@hypr/utils/contexts";
+import { useOngoingSession } from "@hypr/utils/contexts";
 import { useTranscript } from "../hooks/useTranscript";
 import { useTranscriptWidget } from "../hooks/useTranscriptWidget";
 
 export function TranscriptView() {
   const queryClient = useQueryClient();
 
-  const sessionId = useSessions((s) => s.currentSessionId);
+  const noteMatch = useMatch({ from: "/app/note/$id", shouldThrow: true });
+  const sessionId = noteMatch.params.id;
+
   const ongoingSession = useOngoingSession((s) => ({
     start: s.start,
     status: s.status,
@@ -76,67 +82,39 @@ export function TranscriptView() {
     return null;
   }
 
+  const showActions = hasTranscript && sessionId && ongoingSession.isInactive;
+
   return (
     <div className="w-full h-full flex flex-col">
-      <div className="px-4 py-1 border-b border-neutral-100">
-        <header className="flex items-center justify-between w-full">
-          {!showEmptyMessage && (
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-semibold text-neutral-900">Transcript</h2>
-              {isLive && (
-                <div className="flex items-center gap-1.5">
-                  <div className="relative h-1.5 w-1.5">
-                    <div className="absolute inset-0 rounded-full bg-red-500/30"></div>
-                    <div className="absolute inset-0 rounded-full bg-red-500 animate-ping"></div>
-                  </div>
-                  <span className="text-xs font-medium text-red-600">Live</span>
+      <header className="flex items-center justify-between w-full px-4 py-1 my-1 border-b border-neutral-100">
+        {!showEmptyMessage && (
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-semibold text-neutral-900">Transcript</h2>
+            {isLive && (
+              <div className="flex items-center gap-1.5">
+                <div className="relative h-1.5 w-1.5">
+                  <div className="absolute inset-0 rounded-full bg-red-500/30"></div>
+                  <div className="absolute inset-0 rounded-full bg-red-500 animate-ping"></div>
                 </div>
-              )}
-            </div>
-          )}
-          <div className="not-draggable flex items-center gap-1">
-            {(hasTranscript && sessionId) && <SearchAndReplace editorRef={editorRef} />}
-            {(audioExist.data && ongoingSession.isInactive && hasTranscript && sessionId) && (
-              <TooltipProvider key="listen-recording-tooltip">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0 hover:bg-neutral-100"
-                      onClick={handleOpenSession}
-                    >
-                      <AudioLinesIcon size={14} className="text-neutral-600" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Listen to recording</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            {(hasTranscript && sessionId) && (
-              <TooltipProvider key="copy-all-tooltip">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0 hover:bg-neutral-100"
-                      onClick={handleCopyAll}
-                    >
-                      <Copy size={14} className="text-neutral-600" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">
-                    <p>Copy transcript</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                <span className="text-xs font-medium text-red-600">Live</span>
+              </div>
             )}
           </div>
-        </header>
-      </div>
+        )}
+        <div className="not-draggable flex items-center ">
+          {(audioExist.data && showActions) && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleOpenSession}
+            >
+              <AudioLinesIcon size={14} className="text-neutral-600" />
+            </Button>
+          )}
+          {showActions && <SearchAndReplace editorRef={editorRef} />}
+          {showActions && <CopyButton onCopy={handleCopyAll} />}
+        </div>
+      </header>
 
       <div className="flex-1 overflow-hidden">
         {showEmptyMessage
@@ -212,6 +190,7 @@ const SpeakerSelector = ({
   speakerId,
   speakerIndex,
 }: SpeakerViewInnerProps) => {
+  const { userId } = useHypr();
   const [isOpen, setIsOpen] = useState(false);
   const [speakerRange, setSpeakerRange] = useState<SpeakerChangeRange>("current");
   const inactive = useOngoingSession(s => s.status === "inactive");
@@ -228,7 +207,7 @@ const SpeakerSelector = ({
 
   useEffect(() => {
     if (human) {
-      onSpeakerChange(human);
+      onSpeakerChange(human, speakerRange);
     }
   }, [human]);
 
@@ -253,9 +232,19 @@ const SpeakerSelector = ({
     return <p></p>;
   }
 
-  if (!inactive && !human) {
+  if (!inactive) {
     return <p></p>;
   }
+
+  const getDisplayName = (human: Human | null) => {
+    if (!human) {
+      return `Speaker ${speakerIndex ?? 0}`;
+    }
+    if (human.id === userId && !human.full_name) {
+      return "You";
+    }
+    return human.full_name ?? `Speaker ${speakerIndex ?? 0}`;
+  };
 
   return (
     <div className="mt-2 sticky top-0 z-10 bg-neutral-50">
@@ -267,7 +256,7 @@ const SpeakerSelector = ({
           }}
         >
           <span className="underline py-1 font-semibold">
-            {human?.full_name ?? `Speaker ${speakerIndex ?? 0}`}
+            {getDisplayName(human)}
           </span>
         </PopoverTrigger>
         <PopoverContent align="start" side="bottom">
@@ -289,8 +278,6 @@ const SpeakerSelector = ({
   );
 };
 
-type SpeakerChangeRange = "current" | "all" | "fromHere";
-
 interface SpeakerRangeSelectorProps {
   value: SpeakerChangeRange;
   onChange: (value: SpeakerChangeRange) => void;
@@ -308,7 +295,10 @@ function SpeakerRangeSelector({ value, onChange }: SpeakerRangeSelectorProps) {
       <p className="text-sm font-medium text-neutral-700">Apply speaker change to:</p>
       <div className="flex rounded-md border border-neutral-200 p-0.5 bg-neutral-50">
         {options.map((option) => (
-          <label key={option.value} className="flex-1 cursor-pointer">
+          <label
+            key={option.value}
+            className={`flex-1 ${option.value === "current" ? "cursor-pointer" : "cursor-not-allowed"}`}
+          >
             <input
               type="radio"
               name="speaker-range"
@@ -316,13 +306,14 @@ function SpeakerRangeSelector({ value, onChange }: SpeakerRangeSelectorProps) {
               className="sr-only"
               checked={value === option.value}
               onChange={() => onChange(option.value)}
+              disabled={option.value !== "current"}
             />
             <div
               className={`px-2 py-1 text-xs font-medium text-center rounded transition-colors ${
                 value === option.value
                   ? "bg-white text-neutral-900 shadow-sm"
                   : "text-neutral-600 hover:text-neutral-900 hover:bg-white/50"
-              }`}
+              } ${option.value !== "current" ? "opacity-50" : ""}`}
             >
               {option.label}
             </div>
@@ -358,10 +349,15 @@ function SearchAndReplace({ editorRef }: { editorRef: React.RefObject<any> }) {
     if (editorRef.current && searchTerm) {
       editorRef.current.editor.commands.replaceAll(replaceTerm);
       setExpanded(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!expanded) {
       setSearchTerm("");
       setReplaceTerm("");
     }
-  };
+  }, [expanded]);
 
   return (
     <Popover open={expanded} onOpenChange={setExpanded}>
@@ -398,5 +394,27 @@ function SearchAndReplace({ editorRef }: { editorRef: React.RefObject<any> }) {
         </div>
       </PopoverContent>
     </Popover>
+  );
+}
+
+function CopyButton({ onCopy }: { onCopy: () => void }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleClick = () => {
+    onCopy();
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={handleClick}
+    >
+      {copied
+        ? <CheckIcon size={14} className="text-neutral-800" />
+        : <CopyIcon size={14} className="text-neutral-600" />}
+    </Button>
   );
 }

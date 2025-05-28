@@ -1,6 +1,6 @@
 [package]
 name = "desktop"
-version = "0.0.40"
+version = "0.0.41"
 authors = ["you"]
 edition = "2021"
 description = "Hyprnote Desktop App"
@@ -83,7 +83,6 @@ serde_json = { workspace = true }
 bytes = { workspace = true }
 chrono = { workspace = true }
 codes-iso-639 = { workspace = true }
-dotenvy_macro = { workspace = true }
 url = { workspace = true }
 uuid = { workspace = true }
 
