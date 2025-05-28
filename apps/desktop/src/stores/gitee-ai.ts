@@ -1,10 +1,5 @@
+import { commands, GiteeAiLoginStatus, GiteeAiTokenInfo, GiteeAiUser } from "@hypr/plugin-gitee-ai";
 import { create } from "zustand";
-import {
-  commands,
-  GiteeAiLoginStatus,
-  GiteeAiUser,
-  GiteeAiTokenInfo,
-} from "@hypr/plugin-gitee-ai";
 
 interface GiteeAiState {
   loginStatus: GiteeAiLoginStatus;
@@ -54,8 +49,7 @@ export function createGiteeAiStore() {
           loading: false,
         });
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "检查登录状态失败";
+        const errorMessage = error instanceof Error ? error.message : "检查登录状态失败";
         set({
           error: errorMessage,
           loading: false,
@@ -77,8 +71,7 @@ export function createGiteeAiStore() {
           loading: false,
         }));
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "获取用户信息失败";
+        const errorMessage = error instanceof Error ? error.message : "获取用户信息失败";
         set({
           error: errorMessage,
           loading: false,
@@ -101,8 +94,7 @@ export function createGiteeAiStore() {
           loading: false,
         });
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "注销失败";
+        const errorMessage = error instanceof Error ? error.message : "注销失败";
         set({
           error: errorMessage,
           loading: false,

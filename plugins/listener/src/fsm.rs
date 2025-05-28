@@ -59,7 +59,7 @@ impl Session {
                 .is_none_or(|c| c.general.save_recordings.unwrap_or(true));
 
             let language = config.as_ref().map_or_else(
-                || hypr_language::ISO639::En.into(),
+                || hypr_language::ISO639::Zh.into(),
                 |c| c.general.display_language.clone(),
             );
 

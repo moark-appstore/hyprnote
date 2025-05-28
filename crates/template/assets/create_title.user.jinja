@@ -1,22 +1,22 @@
-# Meeting Information:
+# 会议信息：
 
 <meeting_info>
-{% if event %}Event: {{ event.name }}{% endif %}
-{% if participants | length > 0 %}Participants:{% endif %}
+{% if event %}事件：{{ event.name }}{% endif %}
+{% if participants | length > 0 %}参与者：{% endif %}
 {%- for participant in participants %}
 
-- {{ participant.name }}{% if participant.name == config_profile.full_name %} (this is me){% endif %}
+- {{ participant.name }}{% if participant.name == config_profile.full_name %} (这是我){% endif %}
   {%- endfor %}
   </meeting_info>
 
-# Raw Note:
+# 原始笔记：
 
 <raw_note>
 {{ pre_meeting_editor }}
 {{ in_meeting_editor }}
 </raw_note>
 
-# Meeting Transcript:
+# 会议转录：
 
 <transcript>
 {{ render_timeline_view(timeline_view=timeline_view) }}

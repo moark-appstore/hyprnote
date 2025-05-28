@@ -94,7 +94,7 @@ export default function General() {
     resolver: zodResolver(schema),
     defaultValues: {
       autostart: false,
-      displayLanguage: "en",
+      displayLanguage: "zh",
       telemetryConsent: true,
       jargons: "",
       saveRecordings: true,
@@ -105,7 +105,7 @@ export default function General() {
     if (config.data) {
       form.reset({
         autostart: config.data.general.autostart ?? false,
-        displayLanguage: config.data.general.display_language ?? "en",
+        displayLanguage: config.data.general.display_language ?? "zh",
         telemetryConsent: config.data.general.telemetry_consent ?? true,
         jargons: (config.data.general.jargons ?? []).join(", "),
         saveRecordings: config.data.general.save_recordings ?? true,
@@ -124,7 +124,10 @@ export default function General() {
         autostart: v.autostart ?? false,
         display_language: v.displayLanguage,
         telemetry_consent: v.telemetryConsent ?? true,
-        jargons: v.jargons.split(",").map((jargon) => jargon.trim()).filter(Boolean),
+        jargons: v.jargons
+          .split(",")
+          .map((jargon) => jargon.trim())
+          .filter(Boolean),
         save_recordings: v.saveRecordings ?? true,
       };
 
@@ -230,10 +233,7 @@ export default function General() {
                   </FormDescription>
                 </div>
                 <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    value={field.value}
-                  >
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <SelectTrigger className="w-[200px]">
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>

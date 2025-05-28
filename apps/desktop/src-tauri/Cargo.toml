@@ -32,6 +32,7 @@ tauri-plugin-auth = { workspace = true }
 tauri-plugin-connector = { workspace = true }
 tauri-plugin-db = { workspace = true }
 tauri-plugin-flags = { workspace = true }
+tauri-plugin-gitee-ai = { workspace = true }
 tauri-plugin-listener = { workspace = true }
 tauri-plugin-local-llm = { workspace = true }
 tauri-plugin-local-stt = { workspace = true }
@@ -45,7 +46,6 @@ tauri-plugin-task = { workspace = true }
 tauri-plugin-template = { workspace = true }
 tauri-plugin-tray = { workspace = true }
 tauri-plugin-windows = { workspace = true }
-tauri-plugin-gitee-ai = { workspace = true }
 
 tauri = { workspace = true, features = ["specta", "macos-private-api"] }
 tauri-plugin-autostart = "2"

@@ -444,14 +444,17 @@ async fn get_user_info_with_token(token: &str) -> Result<GiteeAiUser> {
         Vec::new()
     };
 
+    let status_str = data["status"].as_str().unwrap_or_default();
+    let status = crate::types::GiteeAiUserStatus::from_str(status_str);
+
+    let purchase_status_str = data["purchase_status"].as_str().unwrap_or_default();
+    let purchase_status = crate::types::GiteeAiUserPurchaseStatus::from_str(purchase_status_str);
+
     Ok(GiteeAiUser {
         mobile: data["phone"].as_str().unwrap_or_default().to_string(),
         email: data["email"].as_str().unwrap_or_default().to_string(),
-        status: data["status"].as_str().unwrap_or_default().to_string(),
-        purchase_status: data["purchase_status"]
-            .as_str()
-            .unwrap_or_default()
-            .to_string(),
+        status,
+        purchase_status,
         pay_plan_ident: data["pay_plan_ident"]
             .as_str()
             .unwrap_or_default()

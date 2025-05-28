@@ -2,13 +2,7 @@ import { useMatch } from "@tanstack/react-router";
 
 import { useEditMode } from "@/contexts/edit-mode-context";
 import { getCurrentWebviewWindowLabel } from "@hypr/plugin-windows";
-import {
-  CalendarToolbar,
-  DefaultToolbar,
-  EntityToolbar,
-  MainToolbar,
-  NoteToolbar,
-} from "./bars";
+import { CalendarToolbar, DefaultToolbar, EntityToolbar, MainToolbar, NoteToolbar } from "./bars";
 
 export default function Toolbar() {
   const noteMatch = useMatch({ from: "/app/note/$id", shouldThrow: false });
@@ -55,9 +49,7 @@ export default function Toolbar() {
     }
 
     if (isOrg || isHuman) {
-      return (
-        <EntityToolbar isEditing={isEditing} onEditToggle={toggleEditMode} />
-      );
+      return <EntityToolbar isEditing={isEditing} onEditToggle={toggleEditMode} />;
     }
 
     return null;

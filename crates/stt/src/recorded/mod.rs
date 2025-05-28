@@ -65,7 +65,7 @@ impl Client {
                     .build();
                 MultiClient::Clova(clova)
             }
-            hypr_language::ISO639::En => {
+            hypr_language::ISO639::Zh => {
                 let deepgram = DeepgramClient::builder()
                     .api_key(&self.deepgram_api_key)
                     .keywords(vec!["Hyprnote".to_string()])

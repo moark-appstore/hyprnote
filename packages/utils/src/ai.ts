@@ -34,7 +34,7 @@ const getModel = async ({ onboarding }: { onboarding: boolean }) => {
     ? "mock-onboarding"
     : (type === "Custom" && customModel)
     ? customModel
-    : "gpt-4";
+    : "Qwen3-4B";
 
   return openai(model);
 };

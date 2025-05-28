@@ -20,6 +20,7 @@ import { broadcastQueryClient } from "./utils";
 
 import { messages as enMessages } from "./locales/en/messages";
 import { messages as koMessages } from "./locales/ko/messages";
+import { messages as zhMessages } from "./locales/zh/messages";
 
 import { routeTree } from "./routeTree.gen";
 
@@ -29,10 +30,11 @@ import { defaultOptions } from "tauri-plugin-sentry-api";
 i18n.load({
   en: enMessages,
   ko: koMessages,
+  zh: zhMessages,
 });
 
 // TODO: load language from user settings
-i18n.activate("en");
+i18n.activate("zh");
 
 const queryClient = new QueryClient({
   defaultOptions: {

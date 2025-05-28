@@ -1,14 +1,8 @@
-import { Button } from "@hypr/ui/components/ui/button";
-import {
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-  ModalTitle,
-} from "@hypr/ui/components/ui/modal";
-import { Loader2, CheckCircle, XCircle, Crown } from "lucide-react";
-import { AliPayIcon, WePayIcon } from "./PaymentIcons";
 import { GiteeAiPayResult } from "@hypr/plugin-gitee-ai";
+import { Button } from "@hypr/ui/components/ui/button";
+import { Modal, ModalBody, ModalFooter, ModalHeader, ModalTitle } from "@hypr/ui/components/ui/modal";
+import { CheckCircle, Crown, Loader2, XCircle } from "lucide-react";
+import { AliPayIcon, WePayIcon } from "./PaymentIcons";
 
 type PaymentStatus =
   | "idle"
@@ -50,9 +44,7 @@ export function PaymentModal({
       case "waiting":
         return {
           title: "请扫码支付",
-          description: `请使用${
-            paymentMethod === "alipay" ? "支付宝" : "微信"
-          }扫描二维码完成支付`,
+          description: `请使用${paymentMethod === "alipay" ? "支付宝" : "微信"}扫描二维码完成支付`,
           icon: paymentMethod === "alipay" ? <AliPayIcon /> : <WePayIcon />,
         };
       case "checking":
@@ -89,9 +81,7 @@ export function PaymentModal({
       open={isOpen}
       onClose={paymentStatus === "success" ? () => {} : onClose}
       size="md"
-      preventClose={
-        paymentStatus === "checking" || paymentStatus === "generating"
-      }
+      preventClose={paymentStatus === "checking" || paymentStatus === "generating"}
     >
       <div className="bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 rounded-lg overflow-hidden">
         <ModalHeader className="p-5 pb-3 bg-gradient-to-r from-blue-600/5 to-purple-600/5">
@@ -122,7 +112,8 @@ export function PaymentModal({
                     />
                   </div>
                   {/* 装饰性边框 */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl -z-10"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-xl -z-10">
+                  </div>
                 </div>
               </div>
             )}

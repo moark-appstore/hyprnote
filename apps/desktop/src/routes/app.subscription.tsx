@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
 import { useGiteeAi } from "@/contexts/gitee-ai";
-import {
-  SubscriptionHeader,
-  ProFeatures,
-  PlanSelection,
-  SubscriptionPeriod,
-  PaymentMethodSelection,
-  OrderSummary,
-  PaymentModal,
-} from "../components/subscription";
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { RegisterForm } from "../components/RegisterForm";
+import {
+  OrderSummary,
+  PaymentMethodSelection,
+  PaymentModal,
+  PlanSelection,
+  ProFeatures,
+  SubscriptionHeader,
+  SubscriptionPeriod,
+} from "../components/subscription";
 import { useSubscription } from "../hooks/useSubscription";
 
 export const Route = createFileRoute("/app/subscription")({

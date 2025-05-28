@@ -88,7 +88,7 @@ impl Client {
 
                 MultiClient::Whisper(whisper)
             }
-            hypr_language::ISO639::En => {
+            hypr_language::ISO639::Zh => {
                 let deepgram = DeepgramClient::builder()
                     .api_key(self.deepgram_api_key.as_ref().unwrap())
                     .keywords(vec!["Hyprnote".to_string()])
@@ -198,7 +198,7 @@ mod tests {
         let mut client = Client::builder()
             .deepgram_api_key(std::env::var("DEEPGRAM_API_KEY").unwrap())
             .build()
-            .for_language(hypr_language::ISO639::En.into())
+            .for_language(hypr_language::ISO639::Zh.into())
             .await;
 
         let mut transcript_stream = client.transcribe(audio_stream).await.unwrap();

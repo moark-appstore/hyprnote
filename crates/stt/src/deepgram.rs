@@ -22,7 +22,7 @@ impl DeepgramClientBuilder {
     }
 
     pub fn build(self) -> Result<DeepgramClient, crate::Error> {
-        let language = self.language.unwrap_or(hypr_language::ISO639::En.into());
+        let language = self.language.unwrap_or(hypr_language::ISO639::Zh.into());
 
         let client = deepgram::Deepgram::with_base_url_and_api_key(
             "https://api.deepgram.com/v1",

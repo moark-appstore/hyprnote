@@ -1,22 +1,11 @@
 import { Trans, useLingui } from "@lingui/react/macro";
-import {
-  createFileRoute,
-  useNavigate,
-  useSearch,
-} from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
 import { zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
 
 import { TabIcon } from "@/components/settings/components/tab-icon";
 import { type Tab, TABS } from "@/components/settings/components/types";
-import {
-  Calendar,
-  Feedback,
-  General,
-  /* Lab, */ LocalAI,
-  Notifications,
-  Sound,
-} from "@/components/settings/views";
+import { Calendar, Feedback, General, /* Lab, */ LocalAI, Notifications, Sound } from "@/components/settings/views";
 import { cn } from "@hypr/ui/lib/utils";
 
 const schema = z.object({
@@ -84,25 +73,25 @@ function Component() {
                       key={tab.name}
                       className={cn(
                         "flex w-full items-center gap-2 rounded-lg p-2 text-sm text-neutral-600 hover:bg-neutral-100",
-                        search.tab === tab.name && "bg-neutral-100 font-medium"
+                        search.tab === tab.name && "bg-neutral-100 font-medium",
                       )}
                       onClick={() => handleClickTab(tab.name)}
                     >
                       <TabIcon tab={tab.name} />
                       <span>
-                        {tab.name === "general" ? (
-                          <Trans>General</Trans>
-                        ) : tab.name === "calendar" ? (
-                          <Trans>Calendar</Trans>
-                        ) : tab.name === "notifications" ? (
-                          <Trans>Notifications</Trans>
-                        ) : tab.name === "sound" ? (
-                          <Trans>Sound</Trans>
-                        ) : tab.name === "ai" ? (
-                          <Trans>AI</Trans>
-                        ) : tab.name === "feedback" ? (
-                          <Trans>Feedback</Trans>
-                        ) : null}
+                        {tab.name === "general"
+                          ? <Trans>General</Trans>
+                          : tab.name === "calendar"
+                          ? <Trans>Calendar</Trans>
+                          : tab.name === "notifications"
+                          ? <Trans>Notifications</Trans>
+                          : tab.name === "sound"
+                          ? <Trans>Sound</Trans>
+                          : tab.name === "ai"
+                          ? <Trans>AI</Trans>
+                          : tab.name === "feedback"
+                          ? <Trans>Feedback</Trans>
+                          : null}
                       </span>
                     </button>
                   ))}

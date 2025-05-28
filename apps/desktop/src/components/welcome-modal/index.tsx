@@ -5,10 +5,7 @@ import { useEffect, useState } from "react";
 
 import { commands } from "@/types";
 // import { commands as authCommands, events } from "@hypr/plugin-auth"; // 隐藏 OAuth 认证
-import {
-  commands as localSttCommands,
-  SupportedModel,
-} from "@hypr/plugin-local-stt";
+import { commands as localSttCommands, SupportedModel } from "@hypr/plugin-local-stt";
 import { commands as sfxCommands } from "@hypr/plugin-sfx";
 import { Modal, ModalBody } from "@hypr/ui/components/ui/modal";
 import { Particles } from "@hypr/ui/components/ui/particles";
@@ -27,8 +24,7 @@ export function WelcomeModal({ isOpen, onClose }: WelcomeModalProps) {
   const [showModelSelection, setShowModelSelection] = useState(false);
 
   const selectSTTModel = useMutation({
-    mutationFn: (model: SupportedModel) =>
-      localSttCommands.setCurrentModel(model),
+    mutationFn: (model: SupportedModel) => localSttCommands.setCurrentModel(model),
   });
 
   // 注释掉 OAuth 相关的 useEffect
@@ -96,15 +92,15 @@ export function WelcomeModal({ isOpen, onClose }: WelcomeModalProps) {
     >
       <ModalBody className="relative p-0 flex flex-col items-center justify-center overflow-hidden">
         <div className="z-10">
-          {!showModelSelection ? (
-            <WelcomeView
-              // portReady={port !== null} // 隐藏 OAuth 端口检查
-              portReady={true} // 直接设为 true，允许立即开始
-              onGetStarted={handleStartLocal}
-            />
-          ) : (
-            <ModelSelectionView onContinue={handleModelSelected} />
-          )}
+          {!showModelSelection
+            ? (
+              <WelcomeView
+                // portReady={port !== null} // 隐藏 OAuth 端口检查
+                portReady={true} // 直接设为 true，允许立即开始
+                onGetStarted={handleStartLocal}
+              />
+            )
+            : <ModelSelectionView onContinue={handleModelSelected} />}
         </div>
 
         <Particles
