@@ -1,10 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@hypr/ui/components/ui/card";
-import { Sparkles, Check } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@hypr/ui/components/ui/card";
+import { Check, Sparkles } from "lucide-react";
 
 const features = [
   "无限制笔记创建",

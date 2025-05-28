@@ -64,7 +64,7 @@ pub fn init(env: &mut minijinja::Environment) {
     env.add_filter("timeline", filters::timeline);
     env.add_filter("language", filters::language);
 
-    [LanguageCode::En, LanguageCode::Ko]
+    [LanguageCode::En, LanguageCode::Ko, LanguageCode::Zh]
         .iter()
         .for_each(|lang| {
             env.add_test(

@@ -51,7 +51,7 @@ impl Default for ConfigGeneral {
     fn default() -> Self {
         Self {
             autostart: false,
-            display_language: hypr_language::ISO639::En.into(),
+            display_language: hypr_language::ISO639::Zh.into(),
             jargons: vec![],
             telemetry_consent: true,
             save_recordings: Some(true),

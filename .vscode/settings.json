@@ -20,5 +20,22 @@
   "rust-analyzer.cargo.targetDir": "target/analyzer",
   "rust-analyzer.cargo.extraEnv": {
     "MACOSX_DEPLOYMENT_TARGET": "14.2"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "dprint.dprint"
+  },
+  "prettier.enable": false,
+  "eslint.format.enable": false,
+  "[jsonc]": {
+    "editor.defaultFormatter": "dprint.dprint"
   }
 }

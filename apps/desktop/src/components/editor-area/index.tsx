@@ -92,7 +92,12 @@ export default function EditorArea({
   }, []);
 
   const handleMentionSearch = async (query: string) => {
-    const session = await dbCommands.listSessions({ type: "search", query, user_id: userId, limit: 5 });
+    const session = await dbCommands.listSessions({
+      type: "search",
+      query,
+      user_id: userId,
+      limit: 5,
+    });
 
     return session.map((s) => ({
       id: s.id,
@@ -111,10 +116,7 @@ export default function EditorArea({
       />
 
       <div
-        className={cn([
-          "h-full overflow-y-auto",
-          enhancedContent && "pb-10",
-        ])}
+        className={cn(["h-full overflow-y-auto", enhancedContent && "pb-10"])}
         onClick={(e) => {
           if (!(e.target instanceof HTMLAnchorElement)) {
             e.stopPropagation();
@@ -202,23 +204,23 @@ export function useEnhanceMutation({
       const config = await dbCommands.getConfig();
       const participants = await dbCommands.sessionListParticipants(sessionId);
 
-      const systemMessage = await templateCommands.render(
-        "enhance.system",
-        { config, type },
-      );
+      const systemMessage = await templateCommands.render("enhance.system", {
+        config,
+        type,
+      });
 
-      const userMessage = await templateCommands.render(
-        "enhance.user",
-        {
-          type,
-          editor: rawContent,
-          words: JSON.stringify(words),
-          participants,
-        },
-      );
+      const userMessage = await templateCommands.render("enhance.user", {
+        type,
+        editor: rawContent,
+        words: JSON.stringify(words),
+        participants,
+      });
 
       const abortController = new AbortController();
-      const abortSignal = AbortSignal.any([abortController.signal, AbortSignal.timeout(60 * 1000)]);
+      const abortSignal = AbortSignal.any([
+        abortController.signal,
+        AbortSignal.timeout(60 * 1000),
+      ]);
       setEnhanceController(abortController);
 
       const provider = await modelProvider();
@@ -246,6 +248,7 @@ export function useEnhanceMutation({
           smoothStream({ delayInMs: 80, chunking: "line" }),
         ],
       });
+      console.log("textStream", textStream);
 
       let acc = "";
       for await (const chunk of textStream) {
@@ -313,10 +316,5 @@ export function useAutoEnhance({
 
       enhanceMutate();
     }
-  }, [
-    ongoingSessionStatus,
-    enhanceStatus,
-    sessionId,
-    enhanceMutate,
-  ]);
+  }, [ongoingSessionStatus, enhanceStatus, sessionId, enhanceMutate]);
 }

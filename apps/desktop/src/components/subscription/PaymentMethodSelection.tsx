@@ -1,9 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@hypr/ui/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@hypr/ui/components/ui/card";
 import { Label } from "@hypr/ui/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@hypr/ui/components/ui/radio-group";
 import { AliPayIcon, WePayIcon } from "./PaymentIcons";
@@ -25,9 +20,7 @@ export function PaymentMethodSelection({
       <CardContent>
         <RadioGroup
           value={paymentMethod}
-          onValueChange={(value) =>
-            onPaymentMethodChange(value as "alipay" | "wepay")
-          }
+          onValueChange={(value) => onPaymentMethodChange(value as "alipay" | "wepay")}
           className="space-y-3"
         >
           <div

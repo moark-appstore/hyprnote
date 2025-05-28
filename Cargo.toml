@@ -79,6 +79,7 @@ tauri-plugin-auth = { path = "plugins/auth" }
 tauri-plugin-connector = { path = "plugins/connector" }
 tauri-plugin-db = { path = "plugins/db" }
 tauri-plugin-flags = { path = "plugins/flags" }
+tauri-plugin-gitee-ai = { path = "plugins/gitee-ai" }
 tauri-plugin-listener = { path = "plugins/listener" }
 tauri-plugin-local-llm = { path = "plugins/local-llm" }
 tauri-plugin-local-stt = { path = "plugins/local-stt" }
@@ -91,7 +92,6 @@ tauri-plugin-task = { path = "plugins/task" }
 tauri-plugin-template = { path = "plugins/template" }
 tauri-plugin-tray = { path = "plugins/tray" }
 tauri-plugin-windows = { path = "plugins/windows" }
-tauri-plugin-gitee-ai = { path = "plugins/gitee-ai" }
 
 async-stream = "0.3.6"
 futures-channel = "0.3.31"

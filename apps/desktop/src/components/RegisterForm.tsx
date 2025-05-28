@@ -1,9 +1,9 @@
+import { useGiteeAi } from "@/contexts/gitee-ai";
+import { commands as giteeAiCommands } from "@hypr/plugin-gitee-ai";
 import { Button } from "@hypr/ui/components/ui/button";
 import { Input } from "@hypr/ui/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
-import { commands as giteeAiCommands } from "@hypr/plugin-gitee-ai";
-import { useGiteeAi } from "@/contexts/gitee-ai";
 
 interface RegisterFormProps {
   onClose: () => void;

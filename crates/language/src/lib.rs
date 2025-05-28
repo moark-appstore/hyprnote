@@ -10,7 +10,7 @@ pub struct Language {
 
 impl Default for Language {
     fn default() -> Self {
-        Self { iso639: ISO639::En }
+        Self { iso639: ISO639::Zh }
     }
 }
 

@@ -12,11 +12,11 @@
 {{ words | timeline }}
 </transcript>
 
-Your job is to write a perfect note based on the above informations.
-Note that above given informations like participants, transcript, etc. are already displayed in the UI, so you don't need to repeat them.
+你的任务是基于以上信息写出一份完美的笔记。
+请注意，上述给出的信息如参与者、转录内容等已经在UI中显示，所以你不需要重复它们。
 
 {% if type == "HyprLocal" %}
-Also, before writing enhanced note, write multiple top-level headers inside <headers></headers> tags, and then write the note based on the headers.
+另外，在写增强笔记之前，请在<headers></headers>标签内写出多个顶级标题，然后基于这些标题来写笔记。
 
-Each items in <headers></headers> tags MUST be used as markdown headers('#') in the final note. No other headers are allowed.
+<headers></headers>标签中的每一项都必须在最终笔记中作为markdown标题('#')使用。不允许使用其他标题。
 {% endif %}

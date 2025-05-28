@@ -1,15 +1,7 @@
+import { GiteeAiAppPaymentPlan, GiteeAiPaymentPeriod } from "@hypr/plugin-gitee-ai";
 import { Button } from "@hypr/ui/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@hypr/ui/components/ui/card";
-import { Crown, Check } from "lucide-react";
-import {
-  GiteeAiAppPaymentPlan,
-  GiteeAiPaymentPeriod,
-} from "@hypr/plugin-gitee-ai";
+import { Card, CardContent, CardHeader, CardTitle } from "@hypr/ui/components/ui/card";
+import { Check, Crown } from "lucide-react";
 
 type PaymentStatus =
   | "idle"

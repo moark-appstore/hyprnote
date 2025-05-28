@@ -4,9 +4,11 @@ import { useShallow } from "zustand/shallow";
 
 import { createGiteeAiStore, GiteeAiStore } from "@/stores/gitee-ai";
 
-const GiteeAiContext = createContext<ReturnType<
-  typeof createGiteeAiStore
-> | null>(null);
+const GiteeAiContext = createContext<
+  ReturnType<
+    typeof createGiteeAiStore
+  > | null
+>(null);
 
 export function GiteeAiProvider({
   children,
@@ -41,7 +43,7 @@ export function GiteeAiProvider({
 export function useGiteeAi<T>(
   selector: Parameters<
     typeof useStore<ReturnType<typeof createGiteeAiStore>, T>
-  >[1]
+  >[1],
 ) {
   const store = useContext(GiteeAiContext);
 

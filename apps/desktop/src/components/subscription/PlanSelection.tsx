@@ -1,14 +1,6 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@hypr/ui/components/ui/card";
+import { GiteeAiAppPaymentPlan, GiteeAiPaymentPeriod } from "@hypr/plugin-gitee-ai";
+import { Card, CardContent, CardHeader, CardTitle } from "@hypr/ui/components/ui/card";
 import { Check, Star } from "lucide-react";
-import {
-  GiteeAiAppPaymentPlan,
-  GiteeAiPaymentPeriod,
-} from "@hypr/plugin-gitee-ai";
 
 interface PlanSelectionProps {
   subscriptionPlans: GiteeAiAppPaymentPlan[];
@@ -55,9 +47,7 @@ export function PlanSelection({
                       : "border-gray-300"
                   }`}
                 >
-                  {selectedPlan === plan.period && (
-                    <Check className="w-4 h-4 text-white" />
-                  )}
+                  {selectedPlan === plan.period && <Check className="w-4 h-4 text-white" />}
                 </div>
                 <div className="flex-1">
                   <h3 className="font-bold text-lg text-gray-800">

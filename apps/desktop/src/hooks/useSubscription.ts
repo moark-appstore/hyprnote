@@ -1,12 +1,12 @@
-import { useState, useEffect, useCallback } from "react";
-import QRCode from "qrcode";
 import {
   commands as giteeAiCommands,
   GiteeAiAppPaymentPlan,
-  GiteeAiPaymentPeriod,
   GiteeAiPayDetail,
+  GiteeAiPaymentPeriod,
   GiteeAiPayResult,
 } from "@hypr/plugin-gitee-ai";
+import QRCode from "qrcode";
+import { useCallback, useEffect, useState } from "react";
 
 type PaymentStatus =
   | "idle"
@@ -20,11 +20,10 @@ export function useSubscription() {
   const [subscriptionPlans, setSubscriptionPlans] = useState<
     GiteeAiAppPaymentPlan[]
   >([]);
-  const [selectedPlan, setSelectedPlan] =
-    useState<GiteeAiPaymentPeriod>("MONTH");
+  const [selectedPlan, setSelectedPlan] = useState<GiteeAiPaymentPeriod>("MONTH");
   const [periodQuantity, setPeriodQuantity] = useState(1);
   const [paymentMethod, setPaymentMethod] = useState<"alipay" | "wepay">(
-    "alipay"
+    "alipay",
   );
 
   // 支付相关状态
@@ -32,10 +31,10 @@ export function useSubscription() {
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>("idle");
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>("");
   const [paymentDetail, setPaymentDetail] = useState<GiteeAiPayDetail | null>(
-    null
+    null,
   );
   const [paymentResult, setPaymentResult] = useState<GiteeAiPayResult | null>(
-    null
+    null,
   );
   const [checkingCount, setCheckingCount] = useState(0);
 
@@ -61,7 +60,9 @@ export function useSubscription() {
 
   // 检查支付结果
   const checkPaymentResult = useCallback(async () => {
-    if (!paymentDetail) return;
+    if (!paymentDetail) {
+      return;
+    }
 
     try {
       setPaymentStatus("checking");
@@ -91,7 +92,9 @@ export function useSubscription() {
 
   // 开始支付流程
   const handleSubscribe = async () => {
-    if (!currentPlan) return;
+    if (!currentPlan) {
+      return;
+    }
 
     try {
       setPaymentStatus("generating");
@@ -101,7 +104,7 @@ export function useSubscription() {
       const res = await giteeAiCommands.pay(
         currentPlan.ident,
         periodQuantity,
-        paymentMethod
+        paymentMethod,
       );
 
       setPaymentDetail(res);
