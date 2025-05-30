@@ -1,4 +1,4 @@
-import { AudioLinesIcon, BellIcon, CalendarIcon, MessageSquareIcon, SettingsIcon, SparklesIcon } from "lucide-react";
+import { AudioLinesIcon, BellIcon, CalendarIcon, SettingsIcon, SparklesIcon } from "lucide-react";
 
 import { type Tab } from "./types";
 

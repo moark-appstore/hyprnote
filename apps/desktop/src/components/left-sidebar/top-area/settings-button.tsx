@@ -4,7 +4,6 @@ import { CogIcon, CpuIcon } from "lucide-react";
 import { useState } from "react";
 
 import Shortcut from "@/components/shortcut";
-import { useHypr } from "@/contexts";
 import { useGiteeAi } from "@/contexts/gitee-ai";
 import { commands as windowsCommands } from "@hypr/plugin-windows";
 import { Button } from "@hypr/ui/components/ui/button";
@@ -19,7 +18,6 @@ import { useQuery } from "@tanstack/react-query";
 
 export function SettingsButton() {
   const [open, setOpen] = useState(false);
-  const { userId } = useHypr();
   const { loginStatus, logout } = useGiteeAi((s) => ({
     loginStatus: s.loginStatus,
     logout: s.logout,
@@ -36,11 +34,6 @@ export function SettingsButton() {
   const handleClickSettings = () => {
     setOpen(false);
     windowsCommands.windowShow({ type: "settings" });
-  };
-
-  const handleClickProfile = () => {
-    setOpen(false);
-    windowsCommands.windowShow({ type: "human", value: userId });
   };
 
   const handleClickPlans = () => {
@@ -126,7 +119,7 @@ export function SettingsButton() {
               onClick={handleLogout}
               className="cursor-pointer"
             >
-              <Trans>退出登录</Trans>
+              退出登录
             </DropdownMenuItem>
           )}
 

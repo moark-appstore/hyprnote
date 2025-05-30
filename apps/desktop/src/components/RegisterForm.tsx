@@ -2,6 +2,7 @@ import { useGiteeAi } from "@/contexts/gitee-ai";
 import { commands as giteeAiCommands } from "@hypr/plugin-gitee-ai";
 import { Button } from "@hypr/ui/components/ui/button";
 import { Input } from "@hypr/ui/components/ui/input";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -30,18 +31,30 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
 
     setIsLoading(true);
     try {
-      const result = await giteeAiCommands.verifyCode(email, verificationCode);
+      await giteeAiCommands.verifyCode(email, verificationCode);
 
       toast.success("登陆成功");
 
-      // 刷新登录状态
+      // 刷新当前窗口的登录状态
       await checkLoginStatus();
 
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        onClose();
+      // 通知主窗口更新登录状态
+      try {
+        const mainWindow = await WebviewWindow.getByLabel("main");
+        if (mainWindow) {
+          await mainWindow.emit("gitee-ai-login-success", { email });
+        }
+      } catch (error) {
+        console.error(error);
       }
+
+      setTimeout(() => {
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          onClose();
+        }
+      }, 100);
     } catch (error) {
       console.error(error);
       toast.error(JSON.stringify(error));

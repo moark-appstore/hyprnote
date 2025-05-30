@@ -92,14 +92,10 @@ export default function LocalAI() {
     <div>
       <Tabs defaultValue="stt" className="flex flex-col" onValueChange={setActiveTab}>
         <div className="flex items-center justify-between">
-          <TabsList className="grid grid-cols-2 w-fit">
+          <TabsList className="grid grid-cols-1 w-fit">
             <TabsTrigger value="stt">
               <MicIcon className="w-4 h-4 mr-2" />
               <Trans>Transcribing</Trans>
-            </TabsTrigger>
-            <TabsTrigger value="llm">
-              <SparklesIcon className="w-4 h-4 mr-2" />
-              <Trans>Enhancing</Trans>
             </TabsTrigger>
           </TabsList>
 

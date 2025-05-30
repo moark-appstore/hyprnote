@@ -2,10 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@hypr/ui/components/ui
 import { Check, Sparkles } from "lucide-react";
 
 const features = [
+  "体验模力方舟（Gitee AI）",
   "无限制笔记创建",
-  "高级AI功能",
+  "高级 AI 功能",
   "优先客服支持",
-  "团队协作功能",
+  "Qwen3 模型功能",
   "高级搜索",
   "数据更准确",
 ];

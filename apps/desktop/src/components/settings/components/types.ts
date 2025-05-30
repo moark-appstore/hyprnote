@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { Bell, Calendar, MessageSquare, Settings, Sparkles, Volume2 } from "lucide-react";
+import { Bell, Calendar, Settings, Sparkles, Volume2 } from "lucide-react";
 
 export type Tab =
   | "general"

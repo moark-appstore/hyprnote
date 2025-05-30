@@ -1,14 +1,11 @@
-import { commands, GiteeAiLoginStatus, GiteeAiTokenInfo, GiteeAiUser } from "@hypr/plugin-gitee-ai";
+import { commands, GiteeAiLoginStatus } from "@hypr/plugin-gitee-ai";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { create } from "zustand";
 
 interface GiteeAiState {
   loginStatus: GiteeAiLoginStatus;
   loading: boolean;
   error: string | null;
-
-  isLoggedIn: boolean;
-  userInfo: GiteeAiUser | null;
-  tokenInfo: GiteeAiTokenInfo | null;
 
   checkLoginStatus: () => Promise<void>;
   getUserInfo: () => Promise<void>;
@@ -28,16 +25,6 @@ export function createGiteeAiStore() {
     },
     loading: false,
     error: null,
-
-    get isLoggedIn() {
-      return get().loginStatus.is_logged_in;
-    },
-    get userInfo() {
-      return get().loginStatus.user_info;
-    },
-    get tokenInfo() {
-      return get().loginStatus.token_info;
-    },
 
     // 检查登录状态
     checkLoginStatus: async () => {
@@ -93,6 +80,16 @@ export function createGiteeAiStore() {
           },
           loading: false,
         });
+
+        // 通知其他窗口登出
+        try {
+          const allWindows = await WebviewWindow.getAll();
+          for (const window of allWindows) {
+            await window.emit("gitee-ai-logout", {});
+          }
+        } catch (error) {
+          console.error("通知其他窗口登出失败", error);
+        }
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "注销失败";
         set({

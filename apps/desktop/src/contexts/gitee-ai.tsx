@@ -1,3 +1,4 @@
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { createContext, useContext, useEffect, useRef } from "react";
 import { useStore } from "zustand";
 import { useShallow } from "zustand/shallow";
@@ -29,8 +30,35 @@ export function GiteeAiProvider({
       .getState()
       .checkLoginStatus()
       .catch((error) => {
-        console.error("初始化Gitee AI状态失败:", error);
+        console.error(error);
       });
+  }, []);
+
+  // 监听跨窗口登录成功事件
+  useEffect(() => {
+    const store = storeRef.current!;
+    const currentWindow = getCurrentWebviewWindow();
+
+    const loginSuccessUnlisten = currentWindow.listen("gitee-ai-login-success", async (event) => {
+      try {
+        await store.getState().checkLoginStatus();
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    const logoutUnlisten = currentWindow.listen("gitee-ai-logout", async (event) => {
+      try {
+        await store.getState().checkLoginStatus();
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    return () => {
+      loginSuccessUnlisten.then(fn => fn());
+      logoutUnlisten.then(fn => fn());
+    };
   }, []);
 
   return (

@@ -19,7 +19,7 @@ export function SubscriptionHeader() {
         </h1>
         <p className="text-xl text-blue-100 mb-2">当前订阅的版本为：免费版</p>
         <p className="text-lg text-blue-200">
-          解锁全部高级功能，提升您的工作效率
+          解锁模力方舟（Gitee AI）高级模型，提升您的工作效率
         </p>
       </div>
     </div>
