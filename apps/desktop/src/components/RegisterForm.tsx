@@ -32,7 +32,6 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
     try {
       const result = await giteeAiCommands.verifyCode(email, verificationCode);
 
-      console.log(result);
       toast.success("登陆成功");
 
       // 刷新登录状态
@@ -84,7 +83,7 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
       <div className="bg-background p-8 rounded-lg w-[400px]">
-        <h2 className="text-2xl font-bold mb-6 text-center">注册/登陆账号</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">登陆账号</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label className="text-sm font-medium">邮箱</label>
@@ -129,7 +128,7 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
               取消
             </Button>
             <Button type="submit" className="flex-1" disabled={isLoading}>
-              {isLoading ? "注册/登陆中..." : "注册/登陆"}
+              {isLoading ? "登陆中..." : "登陆"}
             </Button>
           </div>
         </form>

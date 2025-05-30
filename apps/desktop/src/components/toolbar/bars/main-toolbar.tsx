@@ -5,6 +5,7 @@ import { DeleteNoteButton } from "@/components/toolbar/buttons/delete-note-butto
 import { NewNoteButton } from "@/components/toolbar/buttons/new-note-button";
 import { NewWindowButton } from "@/components/toolbar/buttons/new-window-button";
 import { useLeftSidebar } from "@/contexts";
+import { useGiteeAi } from "@/contexts/gitee-ai";
 import { commands as flagsCommands } from "@hypr/plugin-flags";
 import { commands as windowsCommands } from "@hypr/plugin-windows";
 import { getCurrentWebviewWindowLabel } from "@hypr/plugin-windows";
@@ -16,6 +17,9 @@ import { LeftSidebarButton } from "../buttons/left-sidebar-button";
 import { TranscriptPanelButton } from "../buttons/transcript-panel-button";
 
 export function MainToolbar() {
+  const { loginStatus } = useGiteeAi((s) => ({
+    loginStatus: s.loginStatus,
+  }));
   const noteMatch = useMatch({ from: "/app/note/$id", shouldThrow: false });
   const organizationMatch = useMatch({
     from: "/app/organization/$id",
@@ -66,9 +70,13 @@ export function MainToolbar() {
         className="flex w-40 items-center justify-end"
         data-tauri-drag-region
       >
-        <Button size="sm" className="mr-2" onClick={handleUpgradePro}>
-          升级 Pro
-        </Button>
+        {(!loginStatus.is_logged_in
+          || loginStatus.user_info?.purchase_status !== "ACTIVE") && (
+          <Button size="sm" className="mr-2" onClick={handleUpgradePro}>
+            升级 Pro
+          </Button>
+        )}
+
         {isMain && (
           <>
             {/* {isNote && <ShareButton />} */}

@@ -40,7 +40,7 @@ export default function OngoingSession({
         className="w-full flex items-center justify-between transition-all bg-neutral-900 hover:bg-neutral-700 px-3 py-2.5 rounded-lg hover:scale-95 duration-300"
       >
         <div className="font-medium text-sm text-neutral-300 max-w-[180px] truncate">
-          {session.title || "Untitled"}
+          {session.title || "未命名会话"}
         </div>
 
         <div className="relative h-2 w-2">

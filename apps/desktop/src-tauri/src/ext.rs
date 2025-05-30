@@ -39,7 +39,7 @@ impl<R: tauri::Runtime, T: tauri::Manager<R>> AppExt<R> for T {
 
             let current_model = self
                 .get_current_model()
-                .unwrap_or(SupportedModel::QuantizedBaseEn);
+                .unwrap_or(SupportedModel::QuantizedBase);
 
             if let Ok(true) = self.is_model_downloaded(&current_model).await {
                 if let Err(e) = self.start_server().await {

@@ -141,7 +141,7 @@ function WhenInactiveAndMeetingNotEnded({ disabled, onClick }: { disabled: boole
       </TooltipTrigger>
       <TooltipContent side="bottom" align="end">
         <p>
-          <Trans>Start recording</Trans>
+          <Trans>开始录制</Trans>
         </p>
       </TooltipContent>
     </Tooltip>

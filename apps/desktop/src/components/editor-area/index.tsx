@@ -190,8 +190,8 @@ export function useEnhanceMutation({
       if (!words.length) {
         toast({
           id: "short-timeline",
-          title: "Recording too short",
-          content: "The recording is too short to enhance",
+          title: "录制太短",
+          content: "录制时间太短，无法进行优化",
           dismissible: true,
           duration: 5000,
         });

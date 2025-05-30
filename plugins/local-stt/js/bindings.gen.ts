@@ -46,7 +46,7 @@ async listSupportedModels() : Promise<SupportedModel[]> {
 
 /** user-defined types **/
 
-export type SupportedModel = "QuantizedTiny" | "QuantizedTinyEn" | "QuantizedBase" | "QuantizedBaseEn" | "QuantizedSmall" | "QuantizedSmallEn" | "QuantizedLargeTurbo"
+export type SupportedModel = "QuantizedTiny" | "QuantizedBase" | "QuantizedSmall" | "QuantizedLargeTurbo"
 export type TAURI_CHANNEL<TSend> = null
 
 /** tauri-specta globals **/

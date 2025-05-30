@@ -5,11 +5,11 @@ import { sonnerToast, toast } from "@hypr/ui/components/ui/toast";
 
 export async function showModelSelectToast(language: string) {
   const currentModel = await localSttCommands.getCurrentModel();
-  const englishModels: SupportedModel[] = ["QuantizedTinyEn", "QuantizedBaseEn", "QuantizedSmallEn"];
+  // const englishModels: SupportedModel[] = ["QuantizedTinyEn", "QuantizedBaseEn", "QuantizedSmallEn"];
 
-  if (language === "en" || !englishModels.includes(currentModel)) {
-    return;
-  }
+  // if (language === "en" || !englishModels.includes(currentModel)) {
+  //   return;
+  // }
 
   const id = "language-model-mismatch";
   // TODO: this should not pop up if using Cloud

@@ -1,16 +1,16 @@
-# Objective
+# 目标
 
-- Onboard new users to Hyprnote quickly and efficiently.
-- Demonstrate core functionality within the first 5 minutes of use.
-- Guide users through setting up their first meeting note.
-- Help users understand the value of automated transcription and summary features.
+- 快速高效地引导新用户使用 Hyprnote。
+- 在使用的前 5 分钟内展示核心功能。
+- 指导用户设置他们的第一个会议笔记。
+- 帮助用户理解自动转录和摘要功能的价值。
 
-# Privacy and Performance
+# 隐私和性能
 
-- Built local-first: works offline and stores data on your device.
-- Prioritizes user privacy and seamless experience.
+- 本地优先构建：离线工作并将数据存储在您的设备上。
+- 优先考虑用户隐私和无缝体验。
 
-# Stay Connected
+# 保持联系
 
-- Follow updates on [X](https://hyprnote.com/x).
-- Join the community and chat on [Discord](https://hyprnote.com/discord).
+- 在 [X](https://hyprnote.com/x) 上关注更新。
+- 加入社区并在 [Discord](https://hyprnote.com/discord) 上聊天。

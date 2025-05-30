@@ -12,8 +12,8 @@ export function TabIcon({ tab }: { tab: Tab }) {
       return <AudioLinesIcon className="h-4 w-4" />;
     // case "lab":
     //   return <FlaskConicalIcon size={16} />;
-    case "feedback":
-      return <MessageSquareIcon size={16} />;
+    // case "feedback":
+    //   return <MessageSquareIcon size={16} />;
     case "ai":
       return <SparklesIcon className="h-4 w-4" />;
     case "calendar":

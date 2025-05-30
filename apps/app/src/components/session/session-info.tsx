@@ -47,7 +47,7 @@ export function SessionInfo({ session }: SessionInfoProps) {
   return (
     <div className="mx-auto max-w-2xl w-full flex flex-col p-4 overflow-x-auto scrollbar-none">
       <h2 className="text-2xl font-medium text-neutral-800 mb-2">
-        {session.title || "Untitled"}
+        {session.title || "未命名会话"}
       </h2>
 
       <div className="-mx-1.5 flex flex-row items-center whitespace-nowrap gap-2">

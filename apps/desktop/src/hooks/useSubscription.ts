@@ -78,7 +78,7 @@ export function useSubscription() {
           setPaymentResult(null);
           setQrCodeDataUrl("");
         }, 2000);
-      } else if (result.status === "FAILED" || result.status === "CANCEL") {
+      } else if (result.status === "PENDING" || result.status === "CANCEL") {
         setPaymentStatus("failed");
       } else {
         setPaymentStatus("waiting");

@@ -10,7 +10,7 @@ export default function NoteHeaderChips({ sessionId, hashtags = [] }: {
   return (
     <div className="-mx-1.5 flex flex-row items-center overflow-x-auto scrollbar-none whitespace-nowrap">
       <EventChip sessionId={sessionId} />
-      <ParticipantsChip sessionId={sessionId} />
+      {/* <ParticipantsChip sessionId={sessionId} /> */}
       <TagChip sessionId={sessionId} hashtags={hashtags} />
       <PastNotesChip sessionId={sessionId} />
     </div>

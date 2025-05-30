@@ -6,8 +6,9 @@ export type Tab =
   | "calendar"
   | "ai"
   | "notifications"
-  | "sound"
-  | /* "lab" | */ "feedback";
+  | "sound";
+// | "lab"
+// | "feedback";
 
 export const TABS: { name: Tab; icon: LucideIcon }[] = [
   { name: "general", icon: Settings },
@@ -16,5 +17,5 @@ export const TABS: { name: Tab; icon: LucideIcon }[] = [
   { name: "notifications", icon: Bell },
   { name: "sound", icon: Volume2 },
   // { name: "lab", icon: FlaskConical }, // 隐藏云预览功能
-  { name: "feedback", icon: MessageSquare },
+  // { name: "feedback", icon: MessageSquare },
 ];

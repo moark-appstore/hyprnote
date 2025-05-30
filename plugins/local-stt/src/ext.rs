@@ -167,7 +167,7 @@ impl<R: Runtime, T: Manager<R>> LocalSttPluginExt<R> for T {
     fn get_current_model(&self) -> Result<crate::SupportedModel, crate::Error> {
         let store = self.local_stt_store();
         let model = store.get(crate::StoreKey::DefaultModel)?;
-        Ok(model.unwrap_or(crate::SupportedModel::QuantizedBaseEn))
+        Ok(model.unwrap_or(crate::SupportedModel::QuantizedBase))
     }
 
     #[tracing::instrument(skip_all)]

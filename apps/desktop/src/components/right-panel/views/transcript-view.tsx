@@ -159,12 +159,13 @@ function RenderEmpty({ sessionId }: { sessionId: string }) {
                 <div className="absolute inset-0 rounded-full bg-red-400 animate-ping"></div>
               </div>
             )}
-            {ongoingSession.loading ? "Starting..." : "Start recording"}
+            {ongoingSession.loading ? "Starting..." : "开始录制"}
           </Button>
-          <span className="text-sm">to see live transcript</span>
+          <span className="text-sm">查看实时转录</span>
         </div>
 
-        <div className="flex items-center justify-center w-full max-w-[240px] mb-4">
+        {
+          /* <div className="flex items-center justify-center w-full max-w-[240px] mb-4">
           <div className="h-px bg-neutral-200 flex-grow"></div>
           <span className="px-3 text-xs text-neutral-400 font-medium">or</span>
           <div className="h-px bg-neutral-200 flex-grow"></div>
@@ -179,7 +180,8 @@ function RenderEmpty({ sessionId }: { sessionId: string }) {
             <ClipboardIcon size={14} />Paste transcript{" "}
             <span className="text-xs text-neutral-400 italic">coming soon</span>
           </Button>
-        </div>
+        </div> */
+        }
       </div>
     </div>
   );
