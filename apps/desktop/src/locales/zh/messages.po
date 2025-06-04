@@ -974,7 +974,7 @@ msgstr "切换小部件面板"
 
 #: src/components/settings/views/ai.tsx:98
 msgid "Transcribing"
-msgstr "转录中"
+msgstr "转录模型"
 
 #: src/components/settings/views/team.tsx:192
 msgid "Type or paste in emails below, separated by commas. Your workspace will be billed by members."

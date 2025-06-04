@@ -33,7 +33,9 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
     try {
       await giteeAiCommands.verifyCode(email, verificationCode);
 
-      toast.success("登陆成功");
+      toast.success("登陆成功", {
+        duration: 3000,
+      });
 
       // 刷新当前窗口的登录状态
       await checkLoginStatus();
@@ -57,8 +59,9 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
       }, 100);
     } catch (error) {
       console.error(error);
-      toast.error(JSON.stringify(error));
-      toast.error((error as any)?.message || "登陆失败");
+      toast.error((error as any)?.message || "登陆失败", {
+        duration: 3000,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -66,7 +69,9 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
 
   const handleSendCode = async () => {
     if (!email) {
-      toast.error("请输入邮箱");
+      toast.error("请输入邮箱", {
+        duration: 3000,
+      });
       return;
     }
 
@@ -74,7 +79,9 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
     try {
       await giteeAiCommands.sendVerificationCode(email);
 
-      toast.success("验证码已发送");
+      toast.success("验证码已发送", {
+        duration: 3000,
+      });
       setCountdown(60);
       const timer = setInterval(() => {
         setCountdown((prev) => {
@@ -87,7 +94,9 @@ export function RegisterForm({ onClose, onSuccess }: RegisterFormProps) {
       }, 1000);
     } catch (error) {
       console.error(error);
-      toast.error((error as any)?.message || "发送验证码失败");
+      toast.error((error as any)?.message || "发送验证码失败", {
+        duration: 3000,
+      });
     } finally {
       setIsSendingCode(false);
     }

@@ -22,8 +22,8 @@ export const sttModelMetadata: Record<SupportedModel, {
   huggingface?: string;
 }> = {
   "QuantizedTiny": {
-    name: "Tiny",
-    description: "Fastest, lowest accuracy. Good for offline, low-resource use.",
+    name: "微型模型",
+    description: "最快速度，最低精度。适合离线、低资源使用。",
     intelligence: 1,
     speed: 3,
     size: "44 MB",
@@ -32,20 +32,9 @@ export const sttModelMetadata: Record<SupportedModel, {
     languageSupport: "multilingual",
     huggingface: "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-tiny-q8_0.bin",
   },
-  // "QuantizedTinyEn": {
-  //   name: "Tiny - English",
-  //   description: "Fastest, English-only. Optimized for speed on English audio.",
-  //   intelligence: 1,
-  //   speed: 3,
-  //   size: "44 MB",
-  //   inputType: ["audio"],
-  //   outputType: ["text"],
-  //   languageSupport: "english-only",
-  //   huggingface: "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-tiny.en-q8_0.bin",
-  // },
   "QuantizedBase": {
-    name: "Base",
-    description: "Good balance of speed and accuracy for multilingual use.",
+    name: "基础模型",
+    description: "多语言使用的速度和精度的良好平衡。",
     intelligence: 2,
     speed: 2,
     size: "82 MB",
@@ -54,20 +43,9 @@ export const sttModelMetadata: Record<SupportedModel, {
     languageSupport: "multilingual",
     huggingface: "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-base-q8_0.bin",
   },
-  // "QuantizedBaseEn": {
-  //   name: "Base - English",
-  //   description: "Balanced speed and accuracy, optimized for English audio.",
-  //   intelligence: 2,
-  //   speed: 2,
-  //   size: "82 MB",
-  //   inputType: ["audio"],
-  //   outputType: ["text"],
-  //   languageSupport: "english-only",
-  //   huggingface: "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-base.en-q8_0.bin",
-  // },
   "QuantizedSmall": {
-    name: "Small",
-    description: "Higher accuracy, moderate speed for multilingual transcription.",
+    name: "小型模型",
+    description: "更高精度，多语言转录的中等速度。",
     intelligence: 3,
     speed: 2,
     size: "264 MB",
@@ -76,20 +54,9 @@ export const sttModelMetadata: Record<SupportedModel, {
     languageSupport: "multilingual",
     huggingface: "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-small-q8_0.bin",
   },
-  // "QuantizedSmallEn": {
-  //   name: "Small - English",
-  //   description: "Higher accuracy, moderate speed, optimized for English audio.",
-  //   intelligence: 3,
-  //   speed: 2,
-  //   size: "264 MB",
-  //   inputType: ["audio"],
-  //   outputType: ["text"],
-  //   languageSupport: "english-only",
-  //   huggingface: "https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-small.en-q8_0.bin",
-  // },
   "QuantizedLargeTurbo": {
-    name: "Large",
-    description: "Highest accuracy, potentially faster than standard large. Resource intensive.",
+    name: "大型模型",
+    description: "最高精度，可能比标准大型模型更快。资源密集型。",
     intelligence: 3,
     speed: 1,
     size: "874 MB",
@@ -129,10 +96,10 @@ export const LanguageDisplay = ({ support }: { support: "multilingual" | "englis
   return (
     <div className="flex flex-col items-center px-2">
       <span className="text-[10px] text-neutral-500 uppercase font-medium tracking-wider mb-1.5">
-        Language
+        语言
       </span>
       <div className="text-xs font-medium">
-        {support === "multilingual" ? "Multilingual" : "English Only"}
+        {support === "multilingual" ? "多语言" : "仅英语"}
       </div>
     </div>
   );
@@ -184,7 +151,7 @@ export function STTView() {
             onClick={(e) => {
               if (!isDownloaded) {
                 e.preventDefault();
-                toast.info("You need to download this model first to be able to use it.", {
+                toast.info("您需要先下载此模型才能使用。", {
                   duration: 2500,
                 });
               }
@@ -230,8 +197,8 @@ export function STTView() {
             {metadata && (
               <div className="mt-4 pt-4 border-t border-neutral-200 flex items-center justify-between w-full">
                 <div className="flex divide-x divide-neutral-200 -mx-2">
-                  <RatingDisplay label="Intelligence" rating={metadata.intelligence} icon={BrainIcon} />
-                  <RatingDisplay label="Speed" rating={metadata.speed} icon={SpeedIcon} />
+                  <RatingDisplay label="智能程度" rating={metadata.intelligence} icon={BrainIcon} />
+                  <RatingDisplay label="速度" rating={metadata.speed} icon={SpeedIcon} />
                   <LanguageDisplay support={metadata.languageSupport} />
                 </div>
 
@@ -281,7 +248,7 @@ export function STTView() {
       })}
       {!supportedSTTModels.data?.length && (
         <div className="text-sm text-neutral-500 py-2 text-center">
-          <Trans>No speech-to-text models available or failed to load.</Trans>
+          <Trans>没有可用的语音转文本模型或加载失败。</Trans>
         </div>
       )}
     </RadioGroup>

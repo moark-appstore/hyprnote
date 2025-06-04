@@ -159,7 +159,7 @@ function RenderEmpty({ sessionId }: { sessionId: string }) {
                 <div className="absolute inset-0 rounded-full bg-red-400 animate-ping"></div>
               </div>
             )}
-            {ongoingSession.loading ? "Starting..." : "开始录制"}
+            {ongoingSession.loading ? "马上开始..." : "开始录制"}
           </Button>
           <span className="text-sm">查看实时转录</span>
         </div>
