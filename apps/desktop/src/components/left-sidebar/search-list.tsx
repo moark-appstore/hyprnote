@@ -21,7 +21,7 @@ export default function SearchList({ matches }: { matches: SearchMatch[] }) {
   if (matches.length === 0) {
     return (
       <div className="py-4 text-center text-neutral-500 text-sm">
-        No results found
+        未搜索到结果
       </div>
     );
   }
@@ -37,7 +37,7 @@ export default function SearchList({ matches }: { matches: SearchMatch[] }) {
         <section>
           <h2 className="font-bold text-neutral-600 mb-1 flex items-center gap-1">
             <FileTextIcon className="h-4 w-4 text-neutral-500" />
-            Notes
+            笔记
           </h2>
           <div>
             {sessionMatches.map((match, i) => (
@@ -51,7 +51,7 @@ export default function SearchList({ matches }: { matches: SearchMatch[] }) {
         <section>
           <h2 className="font-bold text-neutral-600 mb-1 flex items-center gap-1">
             <CalendarIcon className="h-4 w-4 text-neutral-500" />
-            Events
+            事件
           </h2>
           <div>
             {eventMatches.map((match, i) => (
@@ -65,7 +65,7 @@ export default function SearchList({ matches }: { matches: SearchMatch[] }) {
         <section>
           <h2 className="font-bold text-neutral-600 mb-1 flex items-center gap-1">
             <UserIcon className="h-4 w-4 text-neutral-500" />
-            People
+            人员
           </h2>
           <div>
             {humanMatches.map((match, i) => (
@@ -79,7 +79,7 @@ export default function SearchList({ matches }: { matches: SearchMatch[] }) {
         <section>
           <h2 className="font-bold text-neutral-600 mb-1 flex items-center gap-1">
             <BuildingIcon className="h-4 w-4 text-neutral-500" />
-            Organizations
+            组织
           </h2>
           <div>
             {organizationMatches.map((match, i) => (

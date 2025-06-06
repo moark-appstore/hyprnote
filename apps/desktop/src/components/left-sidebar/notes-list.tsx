@@ -274,7 +274,7 @@ function NoteItem({
             <div className="flex-1 flex flex-col items-start gap-1 truncate">
               <div className="flex items-center justify-between gap-1">
                 <div className="font-medium text-sm">
-                  {currentSession.title || "未命名会话"}
+                  {currentSession.title || "无标题"}
                 </div>
               </div>
 

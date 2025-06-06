@@ -89,14 +89,14 @@ export function TranscriptView() {
       <header className="flex items-center justify-between w-full px-4 py-1 my-1 border-b border-neutral-100">
         {!showEmptyMessage && (
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-semibold text-neutral-900">Transcript</h2>
+            <h2 className="text-sm font-semibold text-neutral-900">语音转录</h2>
             {isLive && (
               <div className="flex items-center gap-1.5">
                 <div className="relative h-1.5 w-1.5">
                   <div className="absolute inset-0 rounded-full bg-red-500/30"></div>
                   <div className="absolute inset-0 rounded-full bg-red-500 animate-ping"></div>
                 </div>
-                <span className="text-xs font-medium text-red-600">Live</span>
+                <span className="text-xs font-medium text-red-600">实时</span>
               </div>
             )}
           </div>
@@ -294,7 +294,7 @@ function SpeakerRangeSelector({ value, onChange }: SpeakerRangeSelectorProps) {
 
   return (
     <div className="space-y-1.5">
-      <p className="text-sm font-medium text-neutral-700">Apply speaker change to:</p>
+      <p className="text-sm font-medium text-neutral-700">将扬声器更改应用于：</p>
       <div className="flex rounded-md border border-neutral-200 p-0.5 bg-neutral-50">
         {options.map((option) => (
           <label
@@ -378,20 +378,20 @@ function SearchAndReplace({ editorRef }: { editorRef: React.RefObject<any> }) {
             className="h-5 w-32"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search"
+            placeholder="搜索"
           />
           <Input
             className="h-5 w-32"
             value={replaceTerm}
             onChange={(e) => setReplaceTerm(e.target.value)}
-            placeholder="Replace"
+            placeholder="替换"
           />
           <Button
             className="h-5"
             variant="default"
             onClick={handleReplaceAll}
           >
-            Replace
+            替换
           </Button>
         </div>
       </PopoverContent>

@@ -84,7 +84,7 @@ export function NoteCard({
           <div className="w-1 h-3 mt-0.5 rounded-full flex-shrink-0 bg-neutral-600"></div>
 
           <div className="flex-1 text-xs text-neutral-800 truncate">
-            {session.title || "未命名会话"}
+            {session.title || "无标题"}
           </div>
 
           {showTime && (
@@ -96,7 +96,7 @@ export function NoteCard({
       </PopoverTrigger>
       <PopoverContent className="w-72 p-4 bg-white border-neutral-200 m-2 shadow-lg outline-none focus:outline-none focus:ring-0">
         <div className="font-semibold text-lg mb-2 text-neutral-800">
-          {session.title || "未命名会话"}
+          {session.title || "无标题"}
         </div>
 
         <p className="text-sm mb-2 text-neutral-600">

@@ -166,7 +166,7 @@ function WhenInactiveAndMeetingEnded({ disabled, onClick }: { disabled: boolean;
           : "opacity-10 cursor-progress",
       )}
     >
-      <Trans>{disabled ? "Wait..." : isHovered ? "Resume" : "Ended"}</Trans>
+      {disabled ? "等待中" : isHovered ? "继续" : "已结束"}
     </button>
   );
 }

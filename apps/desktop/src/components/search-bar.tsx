@@ -12,20 +12,20 @@ export function SearchBar() {
     searchInputRef,
     focusSearch,
     clearSearch,
-    setSearchQuery,
+    setInputQuery,
   } = useHyprSearch((s) => ({
     searchQuery: s.query,
     searchInputRef: s.searchInputRef,
     focusSearch: s.focusSearch,
     clearSearch: s.clearSearch,
-    setSearchQuery: s.setQuery,
+    setInputQuery: s.setInputQuery,
   }));
   const { t } = useLingui();
   const [isFocused, setIsFocused] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setSearchQuery(value);
+    setInputQuery(value);
   };
 
   return (

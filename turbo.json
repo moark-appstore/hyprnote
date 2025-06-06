@@ -18,7 +18,13 @@
       "cache": false
     },
     "tauri:build": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "env": [
+        "POSTHOG_API_KEY",
+        "SENTRY_DSN",
+        "TAURI_SIGNING_PRIVATE_KEY",
+        "TAURI_SIGNING_PRIVATE_KEY_PASSWORD"
+      ]
     }
   }
 }

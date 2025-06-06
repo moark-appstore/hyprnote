@@ -30,7 +30,7 @@ export default function TitleInput({
       type="text"
       onChange={onChange}
       value={value}
-      placeholder={t`未命名会话`}
+      placeholder={`无标题`}
       className="w-full border-none bg-transparent text-2xl font-bold focus:outline-none placeholder:text-neutral-400"
       onKeyDown={handleKeyDown}
     />
