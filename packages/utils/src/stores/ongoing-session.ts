@@ -44,6 +44,12 @@ export const createOngoingSessionStore = (sessionsStore: ReturnType<typeof creat
       const { enhanceController } = get();
       if (enhanceController) {
         enhanceController.abort();
+        // 立即清理控制器引用
+        set((state) =>
+          mutate(state, (draft) => {
+            draft.enhanceController = null;
+          })
+        );
       }
     },
     setEnhanceController: (controller: AbortController | null) => {

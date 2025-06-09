@@ -187,7 +187,9 @@ function RenderEmpty({ sessionId }: { sessionId: string }) {
   );
 }
 
-const SpeakerSelector = ({
+const SpeakerSelector = () => <></>;
+
+export const SpeakerSelector_ = ({
   onSpeakerChange,
   speakerId,
   speakerIndex,

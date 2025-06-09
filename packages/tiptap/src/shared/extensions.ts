@@ -23,19 +23,19 @@ export const extensions = [
   Placeholder.configure({
     placeholder: ({ node }) => {
       if (node.type.name === "paragraph") {
-        return "Start taking notes...";
+        return "开始写点什么...";
       }
 
       if (node.type.name === "heading") {
-        return "Heading";
+        return "标题";
       }
 
       if (node.type.name === "orderedList" || node.type.name === "bulletList" || node.type.name === "listItem") {
-        return "List";
+        return "列表";
       }
 
       if (node.type.name === "taskList" || node.type.name === "taskItem") {
-        return "To-do";
+        return "待办事项";
       }
 
       if (node.type.name === "blockquote") {

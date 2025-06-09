@@ -17,7 +17,7 @@ import { extractHashtags } from "@hypr/tiptap/shared";
 import { cn } from "@hypr/ui/lib/utils";
 import { markdownTransform, modelProvider, smoothStream, streamText } from "@hypr/utils/ai";
 import { useOngoingSession, useSession } from "@hypr/utils/contexts";
-import { enhanceFailedToast } from "../toast/shared";
+import { enhanceCancelledToast, enhanceFailedToast } from "../toast/shared";
 import { FloatingButton } from "./floating-button";
 import { NoteHeader } from "./note-header";
 
@@ -203,7 +203,7 @@ export function useEnhanceMutation({
 
       const config = await dbCommands.getConfig();
       const participants = await dbCommands.sessionListParticipants(sessionId);
-
+      console.log(config, type);
       const systemMessage = await templateCommands.render("enhance.system", {
         config,
         type,
@@ -235,31 +235,60 @@ export function useEnhanceMutation({
           session_id: sessionId,
         });
       }
+      console.log("systemMessage", systemMessage);
+      console.log("userMessage", userMessage);
 
-      const { text, textStream } = streamText({
-        abortSignal,
-        model,
-        messages: [
-          { role: "system", content: systemMessage },
-          { role: "user", content: userMessage },
-        ],
-        experimental_transform: [
-          markdownTransform(),
-          smoothStream({ delayInMs: 80, chunking: "line" }),
-        ],
-      });
-      console.log("textStream", textStream);
+      try {
+        const { text, textStream } = streamText({
+          abortSignal,
+          model,
+          messages: [
+            { role: "system", content: systemMessage },
+            { role: "user", content: userMessage },
+          ],
+          experimental_transform: [
+            markdownTransform(),
+            smoothStream({ delayInMs: 80, chunking: "line" }),
+          ],
+        });
+        console.log("textStream", textStream);
 
-      let acc = "";
-      for await (const chunk of textStream) {
-        acc += chunk;
-        const html = await miscCommands.opinionatedMdToHtml(acc);
-        setEnhancedContent(html);
+        let acc = "";
+        for await (const chunk of textStream) {
+          acc += chunk;
+          console.log("chunk", chunk);
+          const html = await miscCommands.opinionatedMdToHtml(acc);
+          setEnhancedContent(html);
+        }
+
+        return text.then(miscCommands.opinionatedMdToHtml);
+      } catch (error) {
+        console.error(error);
+        // 清理控制器引用
+        setEnhanceController(null);
+
+        // 检查是否是取消错误
+        if (
+          error instanceof Error && (
+            error.name === "AbortError"
+            || error.message.includes("canceled")
+            || error.message.includes("cancel")
+            || error.message.includes("Request canceled")
+          )
+        ) {
+          console.log("增强请求被取消");
+          // 对于取消操作，重新抛出错误以确保 mutation 状态正确转换
+          throw new Error("增强请求被用户取消");
+        }
+
+        // 其他错误直接抛出
+        throw error;
       }
-
-      return text.then(miscCommands.opinionatedMdToHtml);
     },
     onSuccess: () => {
+      // 清理控制器引用
+      setEnhanceController(null);
+
       analyticsCommands.event({
         event: sessionId === onboardingSessionId
           ? "onboarding_enhance_done"
@@ -271,11 +300,27 @@ export function useEnhanceMutation({
       persistSession();
     },
     onError: (error) => {
-      console.error(error);
+      console.error("增强失败:", error);
 
-      if (!(error as unknown as string).includes("cancel")) {
+      // 确保清理控制器引用
+      setEnhanceController(null);
+
+      // 检查是否是取消错误
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      const isCancelError = errorMessage.includes("cancel")
+        || errorMessage.includes("取消")
+        || errorMessage.includes("AbortError")
+        || errorMessage.includes("Request canceled");
+
+      if (isCancelError) {
+        enhanceCancelledToast();
+      } else {
         enhanceFailedToast();
       }
+    },
+    onSettled: () => {
+      // 无论成功还是失败都清理控制器引用
+      setEnhanceController(null);
     },
   });
 

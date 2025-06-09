@@ -24,12 +24,19 @@ export function FloatingButton({
   const isEnhancePending = useEnhancePendingState(session.id);
   const [isHovered, setIsHovered] = useState(false);
   const [showRefreshIcon, setShowRefreshIcon] = useState(true);
+  const [isCancelling, setIsCancelling] = useState(false);
 
   useEffect(() => {
     if (!isHovered) {
       setShowRefreshIcon(true);
     }
   }, [isHovered]);
+
+  useEffect(() => {
+    if (!isEnhancePending && isCancelling) {
+      setIsCancelling(false);
+    }
+  }, [isEnhancePending, isCancelling]);
 
   const handleRawView = () => {
     setShowRaw(true);
@@ -43,6 +50,7 @@ export function FloatingButton({
     }
 
     if (isEnhancePending) {
+      setIsCancelling(true);
       cancelEnhance();
     } else {
       handleEnhance();
@@ -59,6 +67,7 @@ export function FloatingButton({
     showRaw
       ? "bg-primary text-primary-foreground border-black hover:bg-neutral-800"
       : "bg-background text-neutral-400 hover:bg-neutral-100",
+    (isEnhancePending || isCancelling) && "opacity-75",
   );
 
   const enhanceButtonClasses = cn(
@@ -67,6 +76,7 @@ export function FloatingButton({
     showRaw
       ? "bg-background text-neutral-400 hover:bg-neutral-100"
       : "bg-primary text-primary-foreground border-black hover:bg-neutral-800",
+    isCancelling && "opacity-75",
   );
 
   const showRefresh = !showRaw && isHovered && showRefreshIcon;
@@ -74,9 +84,10 @@ export function FloatingButton({
   return (
     <div className="flex w-fit flex-row items-center group hover:scale-105 transition-transform duration-200">
       <button
-        disabled={isEnhancePending}
+        disabled={isEnhancePending || isCancelling}
         onClick={handleRawView}
         className={rawButtonClasses}
+        title={isEnhancePending ? "增强进行中..." : "查看原始内容"}
       >
         <TypeOutlineIcon size={20} />
       </button>
@@ -86,8 +97,18 @@ export function FloatingButton({
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleEnhanceOrReset}
         className={enhanceButtonClasses}
+        disabled={isCancelling}
+        title={isCancelling
+          ? "正在取消..."
+          : isEnhancePending
+          ? "点击取消增强"
+          : showRaw
+          ? "查看增强内容"
+          : "重新增强"}
       >
-        {isEnhancePending
+        {isCancelling
+          ? <EnhanceWIP size={20} strokeWidth={2} />
+          : isEnhancePending
           ? isHovered
             ? <XIcon size={20} />
             : <EnhanceWIP size={20} strokeWidth={2} />

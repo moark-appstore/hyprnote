@@ -1,4 +1,3 @@
-import { useLingui } from "@lingui/react/macro";
 import { type ChangeEvent, type KeyboardEvent } from "react";
 
 interface TitleInputProps {
@@ -14,8 +13,6 @@ export default function TitleInput({
   onNavigateToEditor,
   editable,
 }: TitleInputProps) {
-  const { t } = useLingui();
-
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === "Tab") {
       e.preventDefault();

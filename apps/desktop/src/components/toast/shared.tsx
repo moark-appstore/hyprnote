@@ -130,3 +130,13 @@ export function enhanceFailedToast() {
     dismissible: true,
   });
 }
+
+export function enhanceCancelledToast() {
+  toast({
+    id: "enhance-cancelled",
+    title: "增强已取消",
+    content: "笔记增强操作已被用户取消",
+    dismissible: true,
+    duration: 3000,
+  });
+}
