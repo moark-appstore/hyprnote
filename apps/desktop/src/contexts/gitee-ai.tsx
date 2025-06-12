@@ -32,6 +32,8 @@ export function GiteeAiProvider({
       .catch((error) => {
         console.error(error);
       });
+
+    store.getState().checkFreeTrialDaysRemaining();
   }, []);
 
   // 监听跨窗口登录成功事件

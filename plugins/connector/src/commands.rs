@@ -88,3 +88,12 @@ pub async fn get_stt_connection<R: tauri::Runtime>(
 ) -> Result<ConnectionSTT, String> {
     app.get_stt_connection().await.map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+#[specta::specta]
+pub async fn get_free_trial_days_remaining<R: tauri::Runtime>(
+    app: tauri::AppHandle<R>,
+) -> Result<Option<i32>, String> {
+    app.get_free_trial_days_remaining()
+        .map_err(|e| e.to_string())
+}

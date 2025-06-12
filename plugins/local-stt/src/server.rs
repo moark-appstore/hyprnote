@@ -163,7 +163,8 @@ async fn websocket(socket: WebSocket, model: hypr_whisper::local::Whisper, guard
                 let duration = chunk.duration() as u64;
                 let confidence = chunk.confidence();
 
-                if confidence < 0.45 {
+                let confidence_threshold = 0.1;
+                if confidence < confidence_threshold {
                     tracing::warn!(confidence, "skipping_transcript: {}", text);
                     continue;
                 }

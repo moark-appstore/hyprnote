@@ -9,6 +9,7 @@ const COMMANDS: &[&str] = &[
     "set_custom_llm_connection",
     "get_llm_connection",
     "get_stt_connection",
+    "get_free_trial_days_remaining",
 ];
 
 fn main() {

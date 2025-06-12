@@ -18,9 +18,10 @@ import { useQuery } from "@tanstack/react-query";
 
 export function SettingsButton() {
   const [open, setOpen] = useState(false);
-  const { loginStatus, logout } = useGiteeAi((s) => ({
+  const { loginStatus, logout, freeTrialDaysRemaining } = useGiteeAi((s) => ({
     loginStatus: s.loginStatus,
     logout: s.logout,
+    freeTrialDaysRemaining: s.freeTrialDaysRemaining,
   }));
 
   const versionQuery = useQuery({
@@ -46,6 +47,14 @@ export function SettingsButton() {
     logout();
   };
 
+  const onClickPlans = () => {
+    // 已登陆，且已购买
+    if (loginStatus?.user_info?.purchase_status === "ACTIVE") {
+      return;
+    }
+    handleClickPlans();
+  };
+
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
@@ -55,56 +64,31 @@ export function SettingsButton() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" className="w-52 p-0">
-        {loginStatus.is_logged_in
-          ? (
-            <>
-              <div
-                className={cn([
-                  "px-2 py-3 bg-gradient-to-r rounded-t-md relative overflow-hidden cursor-pointer",
-                  "from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800",
-                ])}
-                onClick={loginStatus.user_info?.purchase_status === "ACTIVE" ? () => {} : handleClickPlans}
-              >
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDIwIDAgTCAwIDAgTCAwIDIwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xNSkiIHN0cm9rZS13aWR0aD0iMS41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-70">
-                </div>
-                <div className="flex items-center gap-3 text-white relative z-10">
-                  <CpuIcon className="size-8 animate-pulse" />
-                  <div>
-                    <div className="font-medium text-sm">
-                      {loginStatus.user_info?.email || "已登陆"}
-                    </div>
-                    <div className="text-xs text-white/80 mt-0.5">
-                      {loginStatus.user_info?.purchase_status === "ACTIVE" ? "已升级" : "未升级"}
-                    </div>
-                  </div>
-                </div>
+        <div
+          className={cn([
+            "px-2 py-3 bg-gradient-to-r rounded-t-md relative overflow-hidden cursor-pointer",
+            "from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800",
+          ])}
+          onClick={onClickPlans}
+        >
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDIwIDAgTCAwIDAgTCAwIDIwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xNSkiIHN0cm9rZS13aWR0aD0iMS41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-70">
+          </div>
+          <div className="flex items-center gap-3 text-white relative z-10">
+            <CpuIcon className="size-8 animate-pulse" />
+            <div>
+              <div className="font-medium text-sm">
+                {loginStatus?.user_info?.email || "游客模式"}
               </div>
-            </>
-          )
-          : (
-            <div
-              className={cn([
-                "px-2 py-3 bg-gradient-to-r rounded-t-md relative overflow-hidden cursor-pointer",
-                "from-gray-800 to-gray-900 hover:from-gray-700 hover:to-gray-800",
-              ])}
-              onClick={handleClickPlans}
-            >
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjIwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDIwIDAgTCAwIDAgTCAwIDIwIiBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMjU1LDI1NSwyNTUsMC4xNSkiIHN0cm9rZS13aWR0aD0iMS41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-70">
-              </div>
-              <div className="flex items-center gap-3 text-white relative z-10">
-                <CpuIcon className="size-8 animate-pulse" />
-                <div>
-                  <div className="font-medium">
-                    升级 Pro
-                    {/* <Trans>Local mode</Trans> */}
-                  </div>
-                  <div className="text-xs text-white/80 mt-0.5">
-                    限时免费体验高级功能
-                  </div>
-                </div>
+              <div className="text-xs text-yellow-500 mt-0.5">
+                {loginStatus?.user_info?.purchase_status === "ACTIVE" ? "Pro 版本" : (
+                  freeTrialDaysRemaining && freeTrialDaysRemaining > 0
+                    ? `剩余免费体验 ${freeTrialDaysRemaining} 天`
+                    : "升级解锁高级 AI 模型"
+                )}
               </div>
             </div>
-          )}
+          </div>
+        </div>
 
         <div className="p-1">
           <DropdownMenuItem

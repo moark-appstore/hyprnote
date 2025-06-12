@@ -9,7 +9,6 @@ import { useGiteeAi } from "@/contexts/gitee-ai";
 import { commands as flagsCommands } from "@hypr/plugin-flags";
 import { commands as windowsCommands } from "@hypr/plugin-windows";
 import { getCurrentWebviewWindowLabel } from "@hypr/plugin-windows";
-import { Button } from "@hypr/ui/components/ui/button";
 import { cn } from "@hypr/ui/lib/utils";
 import { SearchBar } from "../../search-bar";
 import { ChatPanelButton } from "../buttons/chat-panel-button";
@@ -17,8 +16,9 @@ import { LeftSidebarButton } from "../buttons/left-sidebar-button";
 import { TranscriptPanelButton } from "../buttons/transcript-panel-button";
 
 export function MainToolbar() {
-  const { loginStatus } = useGiteeAi((s) => ({
+  const { freeTrialDaysRemaining } = useGiteeAi((s) => ({
     loginStatus: s.loginStatus,
+    freeTrialDaysRemaining: s.freeTrialDaysRemaining,
   }));
   const noteMatch = useMatch({ from: "/app/note/$id", shouldThrow: false });
   const organizationMatch = useMatch({
@@ -70,12 +70,27 @@ export function MainToolbar() {
         className="flex w-40 items-center justify-end"
         data-tauri-drag-region
       >
-        {(!loginStatus.is_logged_in
+        {freeTrialDaysRemaining && freeTrialDaysRemaining > 0 && (
+          <div
+            className="mr-2 text-sm text-yellow-600 cursor-pointer"
+            onClick={() => {
+              if (freeTrialDaysRemaining && freeTrialDaysRemaining <= 0) {
+                handleUpgradePro();
+              }
+            }}
+          >
+            剩余 <strong>{freeTrialDaysRemaining}</strong> 天试用
+          </div>
+        )}
+
+        {
+          /* {(!loginStatus.is_logged_in
           || loginStatus.user_info?.purchase_status !== "ACTIVE") && (
           <Button size="sm" className="mr-2" onClick={handleUpgradePro}>
             升级 Pro
           </Button>
-        )}
+        )} */
+        }
 
         {isMain && (
           <>

@@ -14,6 +14,7 @@ Default permissions for the plugin
 - `allow-get-local-llm-connection`
 - `allow-get-llm-connection`
 - `allow-get-stt-connection`
+- `allow-get-free-trial-days-remaining`
 
 ## Permission Table
 
@@ -98,6 +99,32 @@ Enables the get_custom_llm_model command without any pre-configured scope.
 <td>
 
 Denies the get_custom_llm_model command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`connector:allow-get-free-trial-days-remaining`
+
+</td>
+<td>
+
+Enables the get_free_trial_days_remaining command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`connector:deny-get-free-trial-days-remaining`
+
+</td>
+<td>
+
+Denies the get_free_trial_days_remaining command without any pre-configured scope.
 
 </td>
 </tr>

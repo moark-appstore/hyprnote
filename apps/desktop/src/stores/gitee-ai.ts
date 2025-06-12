@@ -1,3 +1,4 @@
+import { commands as connectorCommands } from "@hypr/plugin-connector";
 import { commands, GiteeAiLoginStatus } from "@hypr/plugin-gitee-ai";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { create } from "zustand";
@@ -6,12 +7,15 @@ interface GiteeAiState {
   loginStatus: GiteeAiLoginStatus;
   loading: boolean;
   error: string | null;
+  freeTrialDaysRemaining: number | null;
 
   checkLoginStatus: () => Promise<void>;
   getUserInfo: () => Promise<void>;
   logout: () => Promise<void>;
   clearError: () => void;
   setLoading: (loading: boolean) => void;
+  isFreeTrial: boolean;
+  checkFreeTrialDaysRemaining: () => Promise<void>;
 }
 
 export type GiteeAiStore = ReturnType<typeof createGiteeAiStore>;
@@ -25,6 +29,13 @@ export function createGiteeAiStore() {
     },
     loading: false,
     error: null,
+    freeTrialDaysRemaining: null,
+    isFreeTrial: false,
+
+    checkFreeTrialDaysRemaining: async () => {
+      const freeTrialDaysRemaining = await connectorCommands.getFreeTrialDaysRemaining();
+      set({ freeTrialDaysRemaining, isFreeTrial: freeTrialDaysRemaining && freeTrialDaysRemaining > 0 ? true : false });
+    },
 
     // 检查登录状态
     checkLoginStatus: async () => {

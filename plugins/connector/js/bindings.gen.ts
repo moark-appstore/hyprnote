@@ -36,6 +36,9 @@ async getLlmConnection() : Promise<ConnectionLLM> {
 },
 async getSttConnection() : Promise<ConnectionSTT> {
     return await TAURI_INVOKE("plugin:connector|get_stt_connection");
+},
+async getFreeTrialDaysRemaining() : Promise<number | null> {
+    return await TAURI_INVOKE("plugin:connector|get_free_trial_days_remaining");
 }
 }
 

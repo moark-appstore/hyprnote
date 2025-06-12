@@ -3502,7 +3502,7 @@ dependencies = [
 
 [[package]]
 name = "desktop"
-version = "0.0.41"
+version = "0.0.42"
 dependencies = [
  "anyhow",
  "bytes",
@@ -3512,6 +3512,7 @@ dependencies = [
  "db-core",
  "db-script",
  "db-user",
+ "dotenv",
  "futures-util",
  "hound",
  "reqwest 0.12.15",
@@ -13374,6 +13375,7 @@ dependencies = [
 name = "tauri-plugin-connector"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "pinger",
  "reqwest 0.12.15",
  "serde",

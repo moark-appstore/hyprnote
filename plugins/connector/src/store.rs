@@ -6,6 +6,7 @@ pub enum StoreKey {
     CustomApiBase,
     CustomApiKey,
     CustomModel,
+    FreeTrialStartTime,
 }
 
 impl ScopedStoreKey for StoreKey {}

@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-get-free-trial-days-remaining"
+description = "Enables the get_free_trial_days_remaining command without any pre-configured scope."
+commands.allow = ["get_free_trial_days_remaining"]
+
+[[permission]]
+identifier = "deny-get-free-trial-days-remaining"
+description = "Denies the get_free_trial_days_remaining command without any pre-configured scope."
+commands.deny = ["get_free_trial_days_remaining"]
