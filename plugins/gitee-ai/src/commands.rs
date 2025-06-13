@@ -84,3 +84,9 @@ pub async fn get_login_status<R: Runtime>(
 pub async fn logout<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
     app.logout_gitee_ai().await.map_err(|e| e.to_string())
 }
+
+#[tauri::command]
+#[specta::specta]
+pub fn ensure_free_trial_started<R: Runtime>(app: tauri::AppHandle<R>) -> Result<(), String> {
+    app.ensure_free_trial_started().map_err(|e| e.to_string())
+}

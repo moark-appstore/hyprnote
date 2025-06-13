@@ -9,5 +9,6 @@ permissions = [
   "allow-get-app-info",
   "allow-save-token",
   "allow-get-login-status",
-  "allow-logout"
+  "allow-logout",
+  "allow-ensure-free-trial-started"
 ]

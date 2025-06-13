@@ -38,7 +38,7 @@ export const DownloadProgress = ({
   if (error) {
     return (
       <div className="w-full">
-        <div className="text-destructive font-medium">Download failed. Please try again.</div>
+        <div className="text-destructive font-medium">下载失败，请稍后重试</div>
       </div>
     );
   }
@@ -60,10 +60,10 @@ export function showSttModelDownloadToast(model: SupportedModel, onComplete?: ()
   toast(
     {
       id,
-      title: "Speech-to-Text Model",
+      title: "语音识别模型",
       content: (
         <div className="space-y-1">
-          <div>Downloading the speech-to-text model...</div>
+          <div>下载语音识别模型中...</div>
           <DownloadProgress
             channel={sttChannel}
             onComplete={() => {
@@ -90,10 +90,10 @@ export function showLlmModelDownloadToast() {
   toast(
     {
       id,
-      title: "Large Language Model",
+      title: "大语言模型",
       content: (
         <div className="space-y-1">
-          <div>Downloading the large language model...</div>
+          <div>下载大语言模型中...</div>
           <DownloadProgress
             channel={llmChannel}
             onComplete={() => {

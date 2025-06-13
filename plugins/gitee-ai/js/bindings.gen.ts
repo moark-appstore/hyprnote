@@ -33,6 +33,9 @@ async getLoginStatus() : Promise<GiteeAiLoginStatus> {
 },
 async logout() : Promise<null> {
     return await TAURI_INVOKE("plugin:gitee-ai|logout");
+},
+async ensureFreeTrialStarted() : Promise<null> {
+    return await TAURI_INVOKE("plugin:gitee-ai|ensure_free_trial_started");
 }
 }
 

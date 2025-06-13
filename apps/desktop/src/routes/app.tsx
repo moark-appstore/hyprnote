@@ -20,6 +20,7 @@ import {
   useRightPanel,
 } from "@/contexts";
 import { commands } from "@/types";
+import { commands as giteeAiCommands } from "@hypr/plugin-gitee-ai";
 import { commands as listenerCommands } from "@hypr/plugin-listener";
 import { events as windowsEvents, getCurrentWebviewWindowLabel } from "@hypr/plugin-windows";
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@hypr/ui/components/ui/resizable";
@@ -75,6 +76,7 @@ function Component() {
                           isOpen={isOnboardingNeeded}
                           onClose={() => {
                             commands.setOnboardingNeeded(false);
+                            giteeAiCommands.ensureFreeTrialStarted();
                             router.invalidate();
                           }}
                         />

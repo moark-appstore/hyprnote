@@ -25,6 +25,7 @@ fn make_specta_builder<R: tauri::Runtime>() -> tauri_specta::Builder<R> {
             commands::save_token::<tauri::Wry>,
             commands::get_login_status::<tauri::Wry>,
             commands::logout::<tauri::Wry>,
+            commands::ensure_free_trial_started::<tauri::Wry>,
         ])
         .error_handling(tauri_specta::ErrorHandlingMode::Throw)
 }

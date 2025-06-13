@@ -13,6 +13,7 @@ Default permissions for the plugin
 - `allow-save-token`
 - `allow-get-login-status`
 - `allow-logout`
+- `allow-ensure-free-trial-started`
 
 ## Permission Table
 
@@ -22,6 +23,32 @@ Default permissions for the plugin
 <th>Description</th>
 </tr>
 
+
+<tr>
+<td>
+
+`gitee-ai:allow-ensure-free-trial-started`
+
+</td>
+<td>
+
+Enables the ensure_free_trial_started command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`gitee-ai:deny-ensure-free-trial-started`
+
+</td>
+<td>
+
+Denies the ensure_free_trial_started command without any pre-configured scope.
+
+</td>
+</tr>
 
 <tr>
 <td>

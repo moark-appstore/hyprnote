@@ -89,6 +89,12 @@ pub trait GiteeAiPluginExt<R: tauri::Runtime> {
     fn save_gitee_ai_token(&self, token: String) -> impl Future<Output = Result<()>>;
     fn get_gitee_ai_login_status(&self) -> impl Future<Output = Result<GiteeAiLoginStatus>>;
     fn logout_gitee_ai(&self) -> impl Future<Output = Result<()>>;
+
+    // 免费试用相关的独立方法
+    fn ensure_free_trial_started(&self) -> Result<()>;
+    fn get_free_trial_days_remaining(&self) -> Result<Option<i32>>;
+    fn is_in_free_trial(&self) -> Result<bool>;
+    fn get_free_trial_token(&self) -> Option<String>;
 }
 
 impl<R: tauri::Runtime, T: tauri::Manager<R>> GiteeAiPluginExt<R> for T {
@@ -202,6 +208,95 @@ impl<R: tauri::Runtime, T: tauri::Manager<R>> GiteeAiPluginExt<R> for T {
         store.save()?;
         tracing::info!("注销Gitee AI成功");
         Ok(())
+    }
+
+    // 免费试用相关的独立方法
+    fn ensure_free_trial_started(&self) -> Result<()> {
+        let store = self.gitee_ai_store();
+
+        // 检查是否已记录首次进入时间
+        match store.get::<Option<i64>>(crate::StoreKey::FreeTrialStartTime)? {
+            Some(Some(_)) => {
+                // 已记录，不需要再记录
+                tracing::debug!("免费试用开始时间已记录");
+            }
+            _ => {
+                // 首次进入，记录当前时间
+                let now = chrono::Utc::now().timestamp();
+                tracing::info!("首次进入应用，记录免费试用开始时间: {}", now);
+                store.set(crate::StoreKey::FreeTrialStartTime, now)?;
+                store.save()?;
+            }
+        }
+        Ok(())
+    }
+
+    fn get_free_trial_days_remaining(&self) -> Result<Option<i32>> {
+        let store = self.gitee_ai_store();
+
+        // 获取免费试用开始时间
+        match store.get::<Option<i64>>(crate::StoreKey::FreeTrialStartTime)? {
+            Some(Some(trial_start_time)) => {
+                let now = chrono::Utc::now().timestamp();
+                let one_month_seconds = 30 * 24 * 60 * 60; // 30天的秒数
+                let elapsed_seconds = now - trial_start_time;
+
+                if elapsed_seconds > one_month_seconds {
+                    // 试用期已过期
+                    Ok(Some(0))
+                } else {
+                    // 计算剩余天数
+                    let remaining_seconds = one_month_seconds - elapsed_seconds;
+                    let remaining_days = (remaining_seconds / (24 * 60 * 60)) as i32;
+                    Ok(Some(remaining_days.max(0)))
+                }
+            }
+            _ => {
+                // 还没有开始试用
+                Ok(None)
+            }
+        }
+    }
+
+    fn is_in_free_trial(&self) -> Result<bool> {
+        let store = self.gitee_ai_store();
+
+        // 获取免费试用开始时间
+        match store.get::<Option<i64>>(crate::StoreKey::FreeTrialStartTime)? {
+            Some(Some(trial_start_time)) => {
+                let now = chrono::Utc::now().timestamp();
+                let one_month_seconds = 30 * 24 * 60 * 60; // 30天的秒数
+                let elapsed_seconds = now - trial_start_time;
+
+                Ok(elapsed_seconds <= one_month_seconds)
+            }
+            _ => {
+                // 还没有开始试用，认为不在试用期内
+                Ok(false)
+            }
+        }
+    }
+
+    fn get_free_trial_token(&self) -> Option<String> {
+        // 检查是否在免费试用期内
+        if self.is_in_free_trial().unwrap_or(false) {
+            // 优先使用编译时环境变量（构建时设置），其次使用运行时环境变量（开发时设置）
+            let free_token = if let Some(token) = option_env!("CALL_ACCESS_TOKEN") {
+                token.to_string()
+            } else if let Ok(token) = std::env::var("CALL_ACCESS_TOKEN") {
+                token
+            } else {
+                String::new()
+            };
+
+            if !free_token.is_empty() {
+                Some(free_token)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
     }
 }
 

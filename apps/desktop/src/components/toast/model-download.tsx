@@ -63,11 +63,11 @@ export default function ModelDownloadNotification() {
 
     toast({
       id: "model-download-needed",
-      title: "Model Download Needed",
-      content: "Local models are required for offline functionality.",
+      title: "下载所必须的模型",
+      content: "离线功能需要本地模型。",
       buttons: [
         {
-          label: "Download Models",
+          label: "下载模型",
           onClick: () => {
             sonnerToast.dismiss("model-download-needed");
 

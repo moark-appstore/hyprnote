@@ -33,6 +33,7 @@ export function createGiteeAiStore() {
     isFreeTrial: false,
 
     checkFreeTrialDaysRemaining: async () => {
+      await commands.ensureFreeTrialStarted();
       const freeTrialDaysRemaining = await connectorCommands.getFreeTrialDaysRemaining();
       set({ freeTrialDaysRemaining, isFreeTrial: freeTrialDaysRemaining && freeTrialDaysRemaining > 0 ? true : false });
     },

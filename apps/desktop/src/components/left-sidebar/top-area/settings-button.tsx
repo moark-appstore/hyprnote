@@ -48,7 +48,7 @@ export function SettingsButton() {
   };
 
   const onClickPlans = () => {
-    // 已登陆，且已购买
+    // 已登录，且已购买
     if (loginStatus?.user_info?.purchase_status === "ACTIVE") {
       return;
     }

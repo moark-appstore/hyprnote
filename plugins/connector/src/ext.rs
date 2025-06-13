@@ -150,108 +150,69 @@ impl<R: tauri::Runtime, T: tauri::Manager<R>> ConnectorPluginExt<R> for T {
         //     }
         // }
 
-        // 检查 gitee-ai 登录状态
+        // 检查 gitee-ai 登录状态和免费试用
         {
             use tauri_plugin_gitee_ai::{
                 GiteeAiPluginExt, GiteeAiUserPurchaseStatus, GiteeAiUserStatus,
             };
 
+            // 确保免费试用已开始（记录首次进入时间）
+            let _ = GiteeAiPluginExt::ensure_free_trial_started(self);
+
             tracing::info!("开始检查 gitee-ai 登录状态");
             match self.get_gitee_ai_login_status().await {
                 Ok(login_status) => {
-                    tracing::info!(
-                        "获取 gitee-ai 登录状态成功: is_logged_in={}",
-                        login_status.is_logged_in
-                    );
-
                     let api_key = if login_status.is_logged_in
                         && login_status.user_info.as_ref().map_or(false, |u| {
                             let is_normal = matches!(u.status, GiteeAiUserStatus::Normal);
                             let is_purchased =
                                 matches!(u.purchase_status, GiteeAiUserPurchaseStatus::Active);
-                            tracing::info!(
-                                "用户状态检查: is_normal={}, is_purchased={}",
-                                is_normal,
-                                is_purchased
-                            );
                             is_normal && is_purchased
                         }) {
                         // 用户已登录且已购买，使用用户token
                         tracing::info!("用户已登录且已购买，使用用户token");
                         login_status.token_info.map(|t| t.token)
                     } else {
-                        // 其他情况（未登录或未购买），检查免费试用期
-                        tracing::info!("用户未登录或未购买，检查免费试用期");
-                        let store = self.connector_store();
-
-                        // 获取免费试用开始时间，如果没有则记录当前时间
-                        let trial_start_time =
-                            match store.get::<Option<i64>>(StoreKey::FreeTrialStartTime)? {
-                                Some(Some(timestamp)) => {
-                                    tracing::info!("找到免费试用开始时间: {}", timestamp);
-                                    timestamp
-                                }
-                                _ => {
-                                    let now = chrono::Utc::now().timestamp();
-                                    tracing::info!("首次使用，记录免费试用开始时间: {}", now);
-                                    let _ = store.set(StoreKey::FreeTrialStartTime, now);
-                                    now
-                                }
-                            };
-
-                        // 检查是否超过一个月（30天）
-                        let now = chrono::Utc::now().timestamp();
-                        let one_month_seconds = 30 * 24 * 60 * 60; // 30天的秒数（确认无需乘以1000）
-                        let elapsed_seconds = now - trial_start_time;
-                        let remaining_days = (one_month_seconds - elapsed_seconds) / (24 * 60 * 60);
-
-                        tracing::info!(
-                            "免费试用期检查: 已过期{}秒, 剩余{}天",
-                            elapsed_seconds,
-                            remaining_days
-                        );
-
-                        if now - trial_start_time > one_month_seconds {
-                            // 免费试用期已过期，返回None表示无可用token
-                            tracing::warn!("免费试用期已过期");
-                            None
-                        } else {
-                            // 免费试用期内，使用免费token
-                            let free_token = std::env::var("CALL_ACCESS_TOKEN").unwrap_or_default();
-                            tracing::info!(
-                                "免费试用期内，使用免费token: token长度={}",
-                                free_token.len()
-                            );
-                            if free_token.is_empty() {
-                                tracing::warn!("环境变量 CALL_ACCESS_TOKEN 为空或未设置");
-                            }
-                            if !free_token.is_empty() {
-                                Some(free_token)
-                            } else {
-                                None
-                            }
-                        }
+                        // 用户未登录或未购买，尝试获取免费试用token
+                        tracing::info!("用户未登录或未购买，尝试获取免费试用token");
+                        None
                     };
 
-                    // 只有当api_key存在且不为空时才返回GiteeAi连接
+                    // 检查是否有用户token可用
                     if let Some(ref key) = api_key {
                         if !key.is_empty() {
-                            tracing::info!("使用 GiteeAi 连接，api_key长度: {}", key.len());
+                            tracing::info!("使用用户 GiteeAi token，长度: {}", key.len());
                             let conn = ConnectionLLM::GiteeAi(Connection {
                                 api_base: "https://ai.gitee.com/v1".to_string(),
                                 api_key,
                             });
                             return Ok(conn);
-                        } else {
-                            tracing::warn!("api_key 为空，跳过 GiteeAi 连接");
                         }
-                    } else {
-                        tracing::warn!("api_key 为 None，跳过 GiteeAi 连接");
                     }
-                    // 如果api_key为None或为空，继续往下走，尝试其他连接方式
+
+                    // 用户token不可用，尝试免费试用token
+                    if let Some(free_token) = GiteeAiPluginExt::get_free_trial_token(self) {
+                        tracing::info!("使用免费试用 token，{}", free_token);
+                        let conn = ConnectionLLM::GiteeAi(Connection {
+                            api_base: "https://ai.gitee.com/v1".to_string(),
+                            api_key: Some(free_token),
+                        });
+                        return Ok(conn);
+                    } else {
+                        tracing::warn!("没有可用的 GiteeAi token（用户token和免费token都不可用）");
+                    }
                 }
                 Err(e) => {
                     tracing::error!("获取 gitee-ai 登录状态失败: {}", e);
+                    // 登录状态获取失败时，也尝试使用免费试用token
+                    if let Some(free_token) = GiteeAiPluginExt::get_free_trial_token(self) {
+                        tracing::info!("登录失败但在免费试用期内，使用免费token");
+                        let conn = ConnectionLLM::GiteeAi(Connection {
+                            api_base: "https://ai.gitee.com/v1".to_string(),
+                            api_key: Some(free_token),
+                        });
+                        return Ok(conn);
+                    }
                 }
             }
         }
@@ -344,30 +305,11 @@ impl<R: tauri::Runtime, T: tauri::Manager<R>> ConnectorPluginExt<R> for T {
     }
 
     fn get_free_trial_days_remaining(&self) -> Result<Option<i32>, crate::Error> {
-        let store = self.connector_store();
+        use tauri_plugin_gitee_ai::GiteeAiPluginExt;
 
-        // 获取免费试用开始时间
-        match store.get::<Option<i64>>(StoreKey::FreeTrialStartTime)? {
-            Some(Some(trial_start_time)) => {
-                let now = chrono::Utc::now().timestamp();
-                let one_month_seconds = 30 * 24 * 60 * 60; // 30天的秒数
-                let elapsed_seconds = now - trial_start_time;
-
-                if elapsed_seconds > one_month_seconds {
-                    // 试用期已过期
-                    Ok(Some(0))
-                } else {
-                    // 计算剩余天数
-                    let remaining_seconds = one_month_seconds - elapsed_seconds;
-                    let remaining_days = (remaining_seconds / (24 * 60 * 60)) as i32;
-                    Ok(Some(remaining_days.max(0)))
-                }
-            }
-            _ => {
-                // 还没有开始试用
-                Ok(None)
-            }
-        }
+        // 委托给 gitee-ai 插件处理
+        GiteeAiPluginExt::get_free_trial_days_remaining(self)
+            .map_err(|e| crate::Error::UnknownError(format!("获取免费试用天数失败: {:?}", e)))
     }
 }
 
